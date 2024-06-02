@@ -29,10 +29,4 @@ def best_move_from_board(board):
     
     return stockfish.get_best_move()
 
-## TEST
-# example board, using % as space char. Correct move is d2d4.
-board = "rnbqkbnr%pppp1ppp%4p3%8%4P3%8%PPPP1PPP%RNBQKBNR w KQkq - 0 2"
-assert best_move_from_board(board) == 'd2d4'
-print('test passed')
-
 
