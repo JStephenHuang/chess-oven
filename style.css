@@ -1,0 +1,40 @@
+#root {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#board {
+    width: 40vw;
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.square {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.black {
+    background-color: #F95150;
+}
+
+.white {
+    background-color: #FDFAF9;
+}
+
+.selected {
+    /* background-color: #eb4242; */
+    background-color: hsla(120, 100%, 50%, 0.5);
+}
+
+.piece {
+    pointer-events: none;
+    width: 90%;
+    aspect-ratio: 1 / 1;
+}
