@@ -1,6 +1,7 @@
 import { getPiecesPosition } from "./getPiecesPosition.js"
 import { getPawnLegalMoves } from "../pieceLegalMoves/pawn.js"
 
+const cols = ["a" ,"b", "c", "d", "e", "f", "g", "h"]
 
 export function getLegalMoves(focusedSquare) {
   const pieceInitial = focusedSquare.childNodes[0].id   // p, r, k, n, q

@@ -38,8 +38,11 @@ function movePiece (focusedSquare, targetSquare){
             focusedSquare.innerHTML = ""    // remove piece from old square
             focused.push(targetSquare)
             targetSquare.classList.add("selected")
+
+            rotate()
+
         }
-        // rotate()
+
     }
 }
 
