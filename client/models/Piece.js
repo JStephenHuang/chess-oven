@@ -8,6 +8,7 @@ export class Piece {
         } else {
             this.img = `b${initial.toUpperCase()}.png`
         }
+        
     }
 }
 
