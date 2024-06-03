@@ -1,14 +1,10 @@
 import { onClick } from "./helper/onClick.js";
 import { Piece } from "./models/Piece.js";
+import { getPiecesPosition } from "./helper/getPiecesPosition.js";
 
 const board = document.getElementById("board")
 
 const cols = ["a" ,"b", "c", "d", "e", "f", "g", "h"]
-
-const initialPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-
-
-// 
 
 function createBoard () {
     // const squares = []
@@ -38,31 +34,31 @@ function createBoard () {
         }
         // squares.push(row)
     }
+    
     // return squares
 }
 
 createBoard()
 
 function setBoard () {
-    const rows = initialPosition.split(' ')[0].split('/')
-    // rows = ['rnbqkbnr', 'pppppppp','8','8','8',RNBQKBNR...]
+    const initialPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 
-    console.log(rows)
+    const rows = initialPosition.split('/')
+    // rows = ['rnbqkbnr', 'pppppppp','8','8','8',RNBQKBNR...]
 
     let rowNumber = 8
 
     for (const row of rows) {  // looping row in rows -> 'rnbqkbnr'
         
         for (let i = 0; i < 8; i ++) {
-            console.log(row)
-            if (row[i] === "8") break;
+            const initial = row[i]
+            if (initial === "8") break;
 
-            console.log(row[i])
-
-            const piece = new Piece(row[i])
+            const piece = new Piece(initial)
     
             const img = document.createElement("img")
-            img.src = `/assets/${piece.img}`
+            img.src = `/client/assets/${piece.img}`
+            img.setAttribute("id", initial)
             img.classList.add('piece')
             
             const id = `${cols[i]}${rowNumber}`
@@ -78,4 +74,8 @@ function setBoard () {
 
 }
 
+
+
 setBoard()
+
+getPiecesPosition()
