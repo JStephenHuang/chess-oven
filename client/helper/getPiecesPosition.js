@@ -1,6 +1,5 @@
 const squareDivs = document.getElementsByClassName("square")
 
-
 function getPiecesPosition() {
     const piecesPosition = [[],[],[],[],[],[],[],[]]
 
