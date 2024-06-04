@@ -17,7 +17,7 @@ export function getLegalMoves(focusedSquare) {
   // else if (pieceInitial === 'r' || pieceInitial === 'R') {
   //   return getRookLegalMoves(pieceInitial, position, piecesPosition)
   // } 
-  else if (pieceInitial === 'n' || pieceInitial === 'N') {
+  } else if (pieceInitial === 'n' || pieceInitial === 'N') {
     return getKnightLegalMoves(pieceInitial, position, piecesPosition)
   }
   //  else if (pieceInitial === 'b' || pieceInitial === 'B') {
@@ -27,5 +27,4 @@ export function getLegalMoves(focusedSquare) {
   // } else if (pieceInitial === 'k' || pieceInitial === 'K') {
   //   return getKingLegalMoves(pieceInitial, position, piecesPosition) 
   // }
-}
 }
