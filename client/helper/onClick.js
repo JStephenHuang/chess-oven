@@ -39,7 +39,7 @@ function movePiece (focusedSquare, targetSquare){
             focused.push(targetSquare)
             targetSquare.classList.add("selected")
 
-            rotate()
+            //rotate()
 
         }
 
