@@ -8,7 +8,7 @@ let focused = []  // contains selected square element, or empty if nothing selec
 function selectSquare (targetSquare) {
     if (targetSquare.innerHTML === '') return  // if square is empty: return
 
-    getLegalMoves(targetSquare)
+    console.log(getLegalMoves(targetSquare))
         
     focused.push(targetSquare)
     targetSquare.classList.add("selected")
@@ -26,6 +26,7 @@ function movePiece (focusedSquare, targetSquare){
         // check if the move is legal
         const legalMoves = getLegalMoves(focusedSquare)
 
+
         if (!legalMoves.includes(targetSquare.id)) {   // if not a legal move
             if (targetSquare.innerHTML === "") {          // empty square
                 unselectSquare(focusedSquare)
@@ -39,7 +40,7 @@ function movePiece (focusedSquare, targetSquare){
             focused.push(targetSquare)
             targetSquare.classList.add("selected")
 
-            rotate()
+            // rotate()
 
         }
 

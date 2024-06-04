@@ -1,5 +1,6 @@
 import { getPiecesPosition } from "./getPiecesPosition.js"
 import { getPawnLegalMoves } from "../pieceLegalMoves/pawn.js"
+import { getKnightLegalMoves } from "../pieceLegalMoves/knight.js"
 
 const cols = ["a" ,"b", "c", "d", "e", "f", "g", "h"]
 
@@ -13,9 +14,11 @@ export function getLegalMoves(focusedSquare) {
   } 
   // else if (pieceInitial === 'r' || pieceInitial === 'R') {
   //   return getRookLegalMoves(pieceInitial, position, piecesPosition)
-  // } else if (pieceInitial === 'n' || pieceInitial === 'N') {
-  //   return getKnightLegalMoves(pieceInitial, position, piecesPosition)
-  // } else if (pieceInitial === 'b' || pieceInitial === 'B') {
+  // } 
+  else if (pieceInitial === 'n' || pieceInitial === 'N') {
+    return getKnightLegalMoves(pieceInitial, position, piecesPosition)
+  }
+  //  else if (pieceInitial === 'b' || pieceInitial === 'B') {
   //   return getBishopLegalMoves(pieceInitial, position, piecesPosition)
   // } else if (pieceInitial === 'q' || pieceInitial === 'Q') {
   //   return getQueenLegalMoves(pieceInitial, position, piecesPosition)

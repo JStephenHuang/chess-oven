@@ -24,7 +24,7 @@ export function getPawnLegalMoves(initial, position, board) {
 
         if (front === "") {
             legalMoves.push(`${cols[col]}${row + 1}`)
-            if (row === 2) {
+            if (row === 2 && board[indexRow + 2][col] === "") {
               legalMoves.push(`${cols[col]}${row + 2}`)
             }
         }
@@ -49,7 +49,7 @@ export function getPawnLegalMoves(initial, position, board) {
 
         if (front === "") {
             legalMoves.push(`${cols[col]}${row - 1}`)
-            if (row === 7) {
+            if (row === 7 && board[indexRow - 2][col] === "") {
                 legalMoves.push(`${cols[col]}${row - 2}`)
               }
         }
