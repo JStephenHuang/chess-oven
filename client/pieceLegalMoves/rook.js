@@ -73,16 +73,12 @@ export function getRookLegalMoves(initial, position, board) {
   // going left
   for (let j = col; j >= 0; j--) {
     if (j === 0) {
-      console.log(j);
       break;
     } else if (j !== 0) {
-      console.log(j);
       var potentialSquareLeft = `${cols[j - 1]}${row}`;
       var leftMove = board[row - 1][j - 1];
     }
 
-    console.log(potentialSquareLeft);
-    console.log(leftMove);
     if (leftMove == "") {
       legalMoves.push(potentialSquareLeft);
     } else if (differentColor(initial, leftMove)) {
@@ -92,6 +88,5 @@ export function getRookLegalMoves(initial, position, board) {
       break;
     }
   }
-  console.log(legalMoves);
   return legalMoves;
 }

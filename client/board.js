@@ -74,8 +74,4 @@ function setBoard () {
 
 }
 
-
-
 setBoard()
-
-getPiecesPosition()
