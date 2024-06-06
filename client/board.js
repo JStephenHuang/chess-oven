@@ -6,15 +6,14 @@ const board = document.getElementById("board")
 
 const cols = ["a" ,"b", "c", "d", "e", "f", "g", "h"]
 
+// 11 (column, row)
+// board will be organized as a cartesian map: a1 -> '00', h8 -> '77'
+
 function createBoard () {
-    // const squares = []
-
-    for (let i = 8; i > 0; i --) {
-        // const row = []
-
-        for (let j = 0; j < 8; j ++) {
-            const id = `${cols[j]}${i}`
-            // row.push(id);
+    for (let i = 7; i >= 0; i --) { // for i rows:
+        for (let j = 0; j < 8; j ++) {  // for j cols
+            const id = `${j}${i}`
+            
             const squareDiv = document.createElement("div");
             squareDiv.setAttribute('class', "square");
 
@@ -32,10 +31,7 @@ function createBoard () {
             board.appendChild(squareDiv);
             
         }
-        // squares.push(row)
     }
-    
-    // return squares
 }
 
 createBoard()
@@ -46,7 +42,7 @@ function setBoard () {
     const rows = initialPosition.split('/')
     // rows = ['rnbqkbnr', 'pppppppp','8','8','8',RNBQKBNR...]
 
-    let rowNumber = 8
+    let rowNumber = 7
 
     for (const row of rows) {  // looping row in rows -> 'rnbqkbnr'
         
@@ -57,21 +53,20 @@ function setBoard () {
             const piece = new Piece(initial)
     
             const img = document.createElement("img")
-            img.src = `/client/assets/${piece.img}`
+            img.setAttribute("src", `/client/assets/${piece.img}`)
             img.setAttribute("id", initial)
             img.classList.add('piece')
             
-            const id = `${cols[i]}${rowNumber}`
+            const id = `${i}${rowNumber}`
     
             const square = document.getElementById(id)
     
             square.appendChild(img)
-
         }
-        
         rowNumber -= 1
     }
-
 }
 
 setBoard()
+
+console.log(getPiecesPosition())
