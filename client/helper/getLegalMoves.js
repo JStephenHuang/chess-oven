@@ -3,31 +3,32 @@ import { getPawnLegalMoves } from "../pieceLegalMoves/pawn.js";
 import { getBishopLegalMoves } from "../pieceLegalMoves/bishop.js";
 import { getKnightLegalMoves } from "../pieceLegalMoves/knight.js";
 import { getRookLegalMoves } from "../pieceLegalMoves/rook.js";
+import { getKingLegalMoves } from "../pieceLegalMoves/king.js";
+import { getQueenLegalMoves } from "../pieceLegalMoves/queen.js";
 
-const cols = ["a", "b", "c", "d", "e", "f", "g", "h"];
-
+// takes in a selected (focused) square with a piece on it, returns all legal moves
 export function getLegalMoves(focusedSquare) {
   const pieceInitial = focusedSquare.childNodes[0].id; // p, r, k, n, q
   const position = {
     row: parseInt(focusedSquare.id[1]),
-    col: cols.indexOf(focusedSquare.id[0]),
+    col: parseInt(focusedSquare.id[0]),
   }; // {row: 1, col: 2}
-  const piecesPosition = getPiecesPosition();
+  const piecesPosition = getPiecesPosition().reverse();
 
-  if (pieceInitial === "p" || pieceInitial === "P") {
-    return getPawnLegalMoves(pieceInitial, position, piecesPosition);
-  } else if (pieceInitial === "b" || pieceInitial === "B") {
-    return getBishopLegalMoves(pieceInitial, position, piecesPosition);
-  } else if (pieceInitial === "r" || pieceInitial === "R") {
-    return getRookLegalMoves(pieceInitial, position, piecesPosition);
-  } else if (pieceInitial === "n" || pieceInitial === "N") {
-    return getKnightLegalMoves(pieceInitial, position, piecesPosition);
-  }
-  //  else if (pieceInitial === 'b' || pieceInitial === 'B') {
-  //   return getBishopLegalMoves(pieceInitial, position, piecesPosition)
-  // } else if (pieceInitial === 'q' || pieceInitial === 'Q') {
-  //   return getQueenLegalMoves(pieceInitial, position, piecesPosition)
-  // } else if (pieceInitial === 'k' || pieceInitial === 'K') {
-  //   return getKingLegalMoves(pieceInitial, position, piecesPosition)
-  // }
+  const getLegalMoves = {
+    p: getPawnLegalMoves,
+    P: getPawnLegalMoves,
+    b: getBishopLegalMoves,
+    B: getBishopLegalMoves,
+    r: getRookLegalMoves,
+    R: getRookLegalMoves,
+    n: getKnightLegalMoves,
+    N: getKnightLegalMoves,
+    q: getQueenLegalMoves,
+    Q: getQueenLegalMoves,
+    k: getKingLegalMoves,
+    K: getKingLegalMoves
+  };
+  
+  return getLegalMoves[pieceInitial](pieceInitial, position, piecesPosition);
 }

@@ -1,92 +1,40 @@
-const cols = ["a", "b", "c", "d", "e", "f", "g", "h"];
+import { isLegalMove } from "../helper/isLegalMove.js";
 
-function differentColor(initial, piece) {
-  if (initial === initial.toUpperCase()) {
-    return piece !== piece.toUpperCase();
-  } else {
-    return piece !== piece.toLowerCase();
-  }
-}
 export function getRookLegalMoves(initial, position, board) {
-  let legalMoves = [];
-  let potentialMoves = [];
+    const { row, col } = position 
+    const legalMoves = []
 
-  const { row, col } = position;
+    const rookDirections = [
+      {x: 0, y: 1}, {x: 0, y: -1},
+      {x: 1, y: 0}, {x: -1, y: 0}
+    ]
+    
+    const rookMoves = []
+    // find limits of rook moves
+    for (const direction of rookDirections) {  // for each direction
+      let counter = 1
 
-  // for the rook moving on the file vertically
-  for (let i = 1; i < 9; i++) {
-    let potentialSquare = cols[col] + i;
-    potentialMoves.push(potentialSquare);
-  }
+      while (row + counter * direction.y < 8 &&
+             row + counter * direction.y >= 0 &&
+             col + counter * direction.x >= 0 &&
+             col + counter * direction.x < 8 ) {
 
-  for (let i = row; i <= 7; i++) {
-    // going up
+        const targetRow = row + counter * direction.y
+        const targetCol = col + counter * direction.x
 
-    let potentialSquareUp = `${cols[col]}${i + 1}`;
-    let upMove = board[i][col];
+        rookMoves.push({targetRow: targetRow, targetCol: targetCol})
 
-    if (upMove == "") {
-      legalMoves.push(potentialSquareUp);
-    } else if (differentColor(initial, upMove)) {
-      legalMoves.push(potentialSquareUp);
-      break;
-    } else {
-      break;
-    }
-  }
+        if (board[targetRow][targetCol] !== '') {
+          break
+        }  
+        counter ++
+      } 
 
-  for (let i = row; i >= 1; i--) {
-    //for going down the file
-    if (i !== 1) {
-      var downMove = board[i - 2][col];
-    } else if (i === 1) {
-      var downMove = board[i - 1][col];
-      break;
     }
 
-    let potentialSquareDown = `${cols[col]}${i - 1}`;
-    if (downMove == "") {
-      legalMoves.push(potentialSquareDown);
-    } else if (differentColor(initial, downMove)) {
-      legalMoves.push(potentialSquareDown);
-      break;
-    } else {
-      // Handling the case where the piece is of the same color
-      break;
-    }
-  }
-
-  // going right
-  for (let i = col; i < 7; i++) {
-    let potentialSquareRight = `${cols[i + 1]}${row}`;
-    let rightMove = board[row - 1][i + 1];
-    if (rightMove == "") {
-      legalMoves.push(potentialSquareRight);
-    } else if (differentColor(initial, rightMove)) {
-      legalMoves.push(potentialSquareRight);
-      break;
-    } else if (!differentColor(initial, rightMove)) {
-      break;
-    }
-  }
-
-  // going left
-  for (let j = col; j >= 0; j--) {
-    if (j === 0) {
-      break;
-    } else if (j !== 0) {
-      var potentialSquareLeft = `${cols[j - 1]}${row}`;
-      var leftMove = board[row - 1][j - 1];
+    for (const move of rookMoves) {
+      isLegalMove(initial, board, move.targetRow, move.targetCol, legalMoves)
     }
 
-    if (leftMove == "") {
-      legalMoves.push(potentialSquareLeft);
-    } else if (differentColor(initial, leftMove)) {
-      legalMoves.push(potentialSquareLeft);
-      break;
-    } else if (!differentColor(initial, leftMove)) {
-      break;
-    }
-  }
-  return legalMoves;
+    return legalMoves
 }
