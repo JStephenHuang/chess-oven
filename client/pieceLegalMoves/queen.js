@@ -5,5 +5,5 @@ export function getQueenLegalMoves(initial, position, board) {
     const straightMoves = getRookLegalMoves(initial, position, board)
     const diagonalMoves = getBishopLegalMoves(initial, position, board)
     
-    return straightMoves + diagonalMoves
+    return straightMoves.concat(diagonalMoves)
 }

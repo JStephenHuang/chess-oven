@@ -8,14 +8,19 @@ import { getQueenLegalMoves } from "../pieceLegalMoves/queen.js";
 
 // takes in a selected (focused) square with a piece on it, returns all legal moves
 export function getLegalMoves(focusedSquare) {
+
+  // onCheck => if check return another set of array instead of the legal move below
+  
   const pieceInitial = focusedSquare.childNodes[0].id; // p, r, k, n, q
+
   const position = {
     row: parseInt(focusedSquare.id[1]),
     col: parseInt(focusedSquare.id[0]),
   }; // {row: 1, col: 2}
+
   const piecesPosition = getPiecesPosition().reverse();
 
-  const getLegalMoves = {
+  const getLegalMovesMap = {
     p: getPawnLegalMoves,
     P: getPawnLegalMoves,
     b: getBishopLegalMoves,
@@ -30,5 +35,5 @@ export function getLegalMoves(focusedSquare) {
     K: getKingLegalMoves
   };
   
-  return getLegalMoves[pieceInitial](pieceInitial, position, piecesPosition);
+  return getLegalMovesMap[pieceInitial](pieceInitial, position, piecesPosition);
 }

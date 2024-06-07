@@ -68,5 +68,3 @@ function setBoard () {
 }
 
 setBoard()
-
-console.log(getPiecesPosition())
