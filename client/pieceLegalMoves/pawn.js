@@ -7,7 +7,6 @@ export function getPawnLegalMoves(initial, position, board) {
     const direction = initial === "P" ? 1 : -1;
     
     const front = board[row + direction][col]
-
     if (col >= 1 && col <= 7) {  // checking to see if columns in range
       const diagonalLeft = board[row + direction][col - 1]
       if (diagonalLeft !== "" && isDifferentColor(initial, diagonalLeft)) {

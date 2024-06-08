@@ -1,16 +1,21 @@
 import { rotate } from "../board/rotateBoard.js";
 import { getLegalMoves } from "./getLegalMoves.js";
+import { getThreatenedPieces } from "./getThreatenedPieces.js";
+import { isCheck } from "./isCheck.js";
+import { isTurn } from "./isTurn.js";
 
-let focused = []; // contains selected square element, or empty if nothing selected
+const focused = []; // contains selected square element, or empty if nothing selected
+const moveHistory = []
 
 // selecting a square
 function selectSquare(targetSquare) {
   if (targetSquare.innerHTML === "") return; // if square is empty: return
 
-  console.log(getLegalMoves(targetSquare));
 
+  getThreatenedPieces(targetSquare)
   focused.push(targetSquare);
   targetSquare.classList.add("selected");
+
 }
 
 // moving a piece
@@ -23,9 +28,13 @@ function movePiece(focusedSquare, targetSquare) {
     // if user valid target square
 
     // check if the move is legal
+
+    
+    
     const legalMoves = getLegalMoves(focusedSquare);
 
-    if (!legalMoves.includes(targetSquare.id)) {
+
+    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(focusedSquare)) {   // if not legal move or not your turn
       // if not a legal move
       if (targetSquare.innerHTML === "") {
         // empty square
@@ -34,7 +43,10 @@ function movePiece(focusedSquare, targetSquare) {
         unselectSquare(focusedSquare);
         selectSquare(targetSquare);
       }
-    } else {
+    } else { // make the move
+
+      moveHistory.push(`${focusedSquare.childNodes[0].id}${targetSquare.id}`) 
+
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
       focusedSquare.innerHTML = ""; // remove piece from old square
       focused.push(targetSquare);
@@ -47,7 +59,7 @@ function movePiece(focusedSquare, targetSquare) {
 
 function unselectSquare(focusedSquare) {
   focusedSquare.classList.remove("selected");
-  focused = [];
+  focused.pop()
 }
 
 export function onClick(event) {

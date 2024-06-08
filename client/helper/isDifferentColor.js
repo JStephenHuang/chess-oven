@@ -4,6 +4,5 @@ export function isDifferentColor(initial, piece) {
         return piece !== piece.toUpperCase() // true if piece is lowercase (black)
     } else { // black
         return piece !== piece.toLowerCase() // true if piece is uppercase (white)
-
     }
 }

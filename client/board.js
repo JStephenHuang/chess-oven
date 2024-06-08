@@ -4,7 +4,7 @@ import { getPiecesPosition } from "./helper/getPiecesPosition.js";
 
 const board = document.getElementById("board")
 
-const cols = ["a" ,"b", "c", "d", "e", "f", "g", "h"]
+const cols = "abcdefgh"
 
 // 11 (column, row)
 // board will be organized as a cartesian map: a1 -> '00', h8 -> '77'
@@ -68,5 +68,3 @@ function setBoard () {
 }
 
 setBoard()
-
-console.log(getPiecesPosition())
