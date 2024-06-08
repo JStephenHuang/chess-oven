@@ -6,6 +6,7 @@ export function getThreatenedPieces(focusedSquare) {
     const threatenedPieces = []
     const legalMoves = getLegalMoves(focusedSquare)
     const piecesPosition = getPiecesPosition().reverse()
+
     for (const move of legalMoves) {
       const col = move[0]
       const row = move[1]

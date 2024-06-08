@@ -19,7 +19,7 @@ export function isCheck(focusedSquare) {  // takes in a focused sqaure with a pi
             if (color === 'white') {   // if the selected piece is white (white's turn) -> check all legal moves for black for check  
                 if (initial !== '' && initial === initial.toLowerCase()) {
                     const squareDiv = document.getElementById(`${j}${7 - i}`)
-                    
+
                     threatenedPieces.push(...getThreatenedPieces(squareDiv)) 
                     // add all legal moves to opponentLegalMoves
                 }
@@ -31,17 +31,15 @@ export function isCheck(focusedSquare) {  // takes in a focused sqaure with a pi
                     // add all legal moves to opponentLegalMoves
                 }
             }
-
         }
     }
 
-    console.log(threatenedPieces)
-    
     for (const threatenedPiece of threatenedPieces) {
         // threatenedPiece => {position: 00, piece: "R"}
         return (threatenedPiece.piece === "k" || threatenedPiece.piece === "K")
     }
 }
+
 // iterate thru opponents pieces
 // get all arrays of legal moves
 // check if your own king is inside any of the arrays

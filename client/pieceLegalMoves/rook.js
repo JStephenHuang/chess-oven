@@ -29,7 +29,6 @@ export function getRookLegalMoves(initial, position, board) {
         }  
         counter ++
       } 
-
     }
 
     for (const move of rookMoves) {
@@ -38,3 +37,4 @@ export function getRookLegalMoves(initial, position, board) {
 
     return legalMoves
 }
+

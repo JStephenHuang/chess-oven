@@ -1,15 +1,18 @@
 import { rotate } from "../board/rotateBoard.js";
 import { getLegalMoves } from "./getLegalMoves.js";
+import { getThreatenedPieces } from "./getThreatenedPieces.js";
 import { isCheck } from "./isCheck.js";
 import { isTurn } from "./isTurn.js";
 
 const focused = []; // contains selected square element, or empty if nothing selected
-let moveHistory = []
+const moveHistory = []
 
 // selecting a square
 function selectSquare(targetSquare) {
   if (targetSquare.innerHTML === "") return; // if square is empty: return
 
+
+  getThreatenedPieces(targetSquare)
   focused.push(targetSquare);
   targetSquare.classList.add("selected");
 
@@ -27,6 +30,7 @@ function movePiece(focusedSquare, targetSquare) {
     // check if the move is legal
 
     
+    
     const legalMoves = getLegalMoves(focusedSquare);
 
 
@@ -42,7 +46,6 @@ function movePiece(focusedSquare, targetSquare) {
     } else { // make the move
 
       moveHistory.push(`${focusedSquare.childNodes[0].id}${targetSquare.id}`) 
-      console.log(moveHistory)
 
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
       focusedSquare.innerHTML = ""; // remove piece from old square

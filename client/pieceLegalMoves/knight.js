@@ -4,6 +4,9 @@ export function getKnightLegalMoves(initial, position, board) {
     const legalMoves = [];
     const { row , col } = position
 
+    // row = 0
+    // col = 1
+
     const knightMoves = [  // defining moves for the knight (all possible L-shapes)
         { row: 2, col: -1 }, { row: 2, col: 1 },
         { row: -2, col: -1 }, { row: -2, col: 1 },
