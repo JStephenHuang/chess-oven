@@ -5,14 +5,13 @@ import { isCheck } from "./isCheck.js";
 import { isCheckMate } from "./isCheckMate.js";
 import { isTurn } from "./isTurn.js";
 
-import { onEnPassantforWhite } from "./onEnPassant.js";
-import { onEnPassantforBlack } from "./onEnPassant.js";
+import { onEnPassant } from "./onEnPassant.js";
 
 import { previewBoard } from "./previewBoard.js";
 
 
 const focused = []; // contains selected square element, or empty if nothing selected
-export let moveHistory = [];
+export const moveHistory = [];
 function addMove(startPosition, endPosition) {
   moveHistory.push({
     start: startPosition,
@@ -38,13 +37,6 @@ function movePiece(focusedSquare, targetSquare) {
     // check if the move is legal
 
 
-    const legalMoves = getLegalMoves(focusedSquare);
-
-    if (
-      !legalMoves.includes(targetSquare.id) ||
-      !isTurn(moveHistory, focusedSquare) ||
-      isCheck(focusedSquare)
-    ) {
       // if not legal move or not your turn
 
     const pieceInitial = focusedSquare.childNodes[0].id
@@ -67,19 +59,13 @@ function movePiece(focusedSquare, targetSquare) {
       }
     } else {
       // make the move
-
       // moveHistory.push(`${focusedSquare.childNodes[0].id}${targetSquare.id}`);
       addMove(
         `${focusedSquare.childNodes[0].id}${focusedSquare.id}`,
         `${focusedSquare.childNodes[0].id}${targetSquare.id}`
       );
-      let startSquare = `${focusedSquare.childNodes[0].id}${focusedSquare.id}`;
-      let endSquare = `${focusedSquare.childNodes[0].id}${targetSquare.id}`;
 
-      onEnPassantforWhite(moveHistory);
-
-      onEnPassantforBlack(moveHistory);
-
+      onEnPassant(moveHistory)
 
       // Move completed
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square

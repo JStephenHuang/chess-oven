@@ -31,12 +31,8 @@ function checkEnPassant(moveHistory, pawn, oppPawn, startRow) {
   }
 }
 
-function onEnPassantforWhite(moveHistory) {
+export function onEnPassant(moveHistory) {
   checkEnPassant(moveHistory, "p", "P", "4");
-}
-
-function onEnPassantforBlack(moveHistory) {
   checkEnPassant(moveHistory, "P", "p", "3");
 }
 
-export { onEnPassantforWhite, onEnPassantforBlack };

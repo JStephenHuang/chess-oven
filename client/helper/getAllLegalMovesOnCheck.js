@@ -17,6 +17,7 @@ export function getAllLegalMovesOnCheck(color, board) {  // takes in a focused s
 
             if (!isCheck(color, previewedBoard)) {
                 legalMoves.push({position: legalMove.position, piece: legalMove.initial, move: move})
+                
             }
         }
     }
