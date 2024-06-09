@@ -1,47 +1,21 @@
-import { getLegalMoves } from "./getLegalMoves.js";
-import { getPiecesPosition } from "./getPiecesPosition.js";
-import { getThreatenedPieces } from "./getThreatenedPieces.js";
+import { getAllThreatenedPieces } from "./getThreatenedPieces.js";
+import { previewBoard } from "./previewBoard.js";
+import { getAllLegalMovesOnCheck } from "./getAllLegalMovesOnCheck.js";
 
-export function isCheck(focusedSquare) {  // takes in a focused sqaure with a piece. If a white piece is selected, returns true if white in check or if a black piece is selected and black king in check. False if king not in check
-    const pieceInitial = focusedSquare.childNodes[0].id
+export function isCheck(color, board) {  // if color -> white, sees is white is in check.
+    //const pieceInitial = focusedSquare.childNodes[0].id
 
-    const color = pieceInitial === pieceInitial.toUpperCase() ? "white" : "black"
-    
-    const piecesPosition = getPiecesPosition()
+    const opponentColor = color === "white" ? "black" : "white"
 
-    // iterating thru the board  
-    const threatenedPieces = [] // pieces threatened by the opponent
+    const allThreatenedPieces = getAllThreatenedPieces(board, opponentColor)  // array of all threatened pieces on previewBoard
 
-    for (let i = 0; i < 8; i ++) { 
-        const row = piecesPosition[i]  
-        for (let j = 0; j < 8; j ++) {
-            const initial = row[j]
-            if (color === 'white') {   // if the selected piece is white (white's turn) -> check all legal moves for black for check  
-                if (initial !== '' && initial === initial.toLowerCase()) {
-                    const squareDiv = document.getElementById(`${j}${7 - i}`)
+    for (const threatenedPiece of allThreatenedPieces) { // [p,r,r,k,q] -> True (in check)  
+        if (threatenedPiece.piece === "k" || threatenedPiece.piece === "K") {
+            // getAllLegalMovesOnCheck(focusedSquare)
 
-                    threatenedPieces.push(...getThreatenedPieces(squareDiv)) 
-                    // add all legal moves to opponentLegalMoves
-                }
-            } else { // if black: check all legal moves for white
-                if (initial !== '' && initial === initial.toUpperCase()) {
-                    const squareDiv = document.getElementById(`${j}${7 - i}`)
-                    
-                    threatenedPieces.push(...getThreatenedPieces(squareDiv)) 
-                    // add all legal moves to opponentLegalMoves
-                }
-            }
-        }
+            return true
+
+        } 
     }
-
-    for (const threatenedPiece of threatenedPieces) {
-        // threatenedPiece => {position: 00, piece: "R"}
-        return (threatenedPiece.piece === "k" || threatenedPiece.piece === "K")
-    }
+    return false
 }
-
-// iterate thru opponents pieces
-// get all arrays of legal moves
-// check if your own king is inside any of the arrays
-// if so -> check
-// else default onClick
