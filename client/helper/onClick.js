@@ -2,7 +2,9 @@ import { rotate } from "../board/rotateBoard.js";
 import { getLegalMoves } from "./getLegalMoves.js";
 import { getPiecesPosition } from "./getPiecesPosition.js";
 import { isCheck } from "./isCheck.js";
+import { isCheckMate } from "./isCheckMate.js";
 import { isTurn } from "./isTurn.js";
+import { previewBoard } from "./previewBoard.js";
 
 const focused = []; // contains selected square element, or empty if nothing selected
 const moveHistory = []
@@ -28,12 +30,14 @@ function movePiece(focusedSquare, targetSquare) {
 
     // check if the move is legal
 
+    const pieceInitial = focusedSquare.childNodes[0].id
+    const color = pieceInitial === pieceInitial.toUpperCase() ? "white" : "black"
     const currentBoard = getPiecesPosition().reverse()
     
+    const previewedBoard = previewBoard(pieceInitial, focusedSquare.id, targetSquare.id)  // make preview of the board after move
     const legalMoves = getLegalMoves(focusedSquare, currentBoard);
 
-
-    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(focusedSquare, targetSquare)) {   
+    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(color, previewedBoard)) {   
       // if not legal move or not your turn or it would result in check
       // if not a legal move
       if (targetSquare.innerHTML === "") {
@@ -46,11 +50,23 @@ function movePiece(focusedSquare, targetSquare) {
     } else { // make the move
 
       moveHistory.push(`${focusedSquare.childNodes[0].id}${targetSquare.id}`) 
-      
+
+
+      // Move completed
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
       focusedSquare.innerHTML = ""; // remove piece from old square
       focused.push(targetSquare);
       targetSquare.classList.add("selected");
+
+      const currentBoard = getPiecesPosition().reverse()
+      const opponentColor = color === "white" ? "black" : "white"
+      
+      if (isCheck(opponentColor, currentBoard)) {
+        if (isCheckMate(opponentColor, currentBoard)) {
+          
+          console.log('CHECKMATE DUMBASS')
+        }
+      } 
 
       // rotate()
     }

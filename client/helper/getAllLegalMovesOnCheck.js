@@ -1,17 +1,11 @@
 import { getAllLegalMoves, getLegalMoves } from "./getLegalMoves.js";
 import { getPiecesPosition } from "./getPiecesPosition.js";
 import { getAllThreatenedPieces, getThreatenedPieces } from "./getThreatenedPieces.js";
+import { isCheck } from "./isCheck.js";
 import { previewBoard } from "./previewBoard.js";
 
-export function getAllLegalMovesOnCheck(focusedSquare) {  // takes in a focused square with a piece. If a white piece is selected, returns true if white in check or if a black piece is selected and black king in check. False if king not in check
-    const pieceInitial = focusedSquare.childNodes[0].id
-
+export function getAllLegalMovesOnCheck(color, board) {  // takes in a focused square with a piece. If a white piece is selected, returns true if white in check or if a black piece is selected and black king in check. False if king not in check
     const legalMoves = []
-
-    const color = pieceInitial === pieceInitial.toUpperCase() ? "white" : "black"
-    const opponentColor = pieceInitial === pieceInitial.toUpperCase() ? "black" : "white" 
-    
-    const board = getPiecesPosition()
 
     // iterating thru the board  
     const allLegalMoves = getAllLegalMoves(board, color)  // [{id, legalMoves}] id => position of the square, legaMoves => array of all legal moves of the square
@@ -19,14 +13,10 @@ export function getAllLegalMovesOnCheck(focusedSquare) {  // takes in a focused 
     for (const legalMove of allLegalMoves) {   // for each object
         for (const move of legalMove.legalMoves) {   // for each legal move of piece
             
-            const previewedBoard = previewBoard(pieceInitial, legalMove.position, move)   // make preview of the board after move
-            
-            const allThreatenedPieces = getAllThreatenedPieces(previewedBoard, opponentColor)  // array of all threatened pieces on previewBoard
+            const previewedBoard = previewBoard(legalMove.initial, legalMove.position, move)   // make preview of the board after move
 
-            for (const threatenedPiece of allThreatenedPieces) {
-                if (threatenedPiece.piece !== "k" && threatenedPiece.piece !== "K") {
-                    legalMoves.push(move)
-                }
+            if (!isCheck(color, previewedBoard)) {
+                legalMoves.push({position: legalMove.position, piece: legalMove.initial, move: move})
             }
         }
     }

@@ -50,11 +50,11 @@ export function getAllLegalMoves(board, color) {
           const initialColor = color === "white" ? initial.toUpperCase() : initial.toLowerCase()
           
           if (initial === initialColor) {
-              const id = `${j}${7 - i}`
+              const id = `${j}${i}`
               const squareDiv = document.getElementById(id);
-              legalMoves.push({position: id, legalMoves: getLegalMoves(squareDiv)});
+              legalMoves.push({initial: initial, position: id, legalMoves: getLegalMoves(squareDiv, board)});
           }
-      }
+        }
     }
   }
 
