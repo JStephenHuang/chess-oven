@@ -1,30 +1,22 @@
-import { getLegalMoves } from "./getLegalMoves.js";
-import { getPiecesPosition } from "./getPiecesPosition.js";
-import {
-  getThreatenedPieces,
-  getAllThreatenedPieces,
-} from "./getThreatenedPieces.js";
+import { getAllThreatenedPieces } from "./getThreatenedPieces.js";
+import { previewBoard } from "./previewBoard.js";
+import { getAllLegalMovesOnCheck } from "./getAllLegalMovesOnCheck.js";
 
-export function isCheck(focusedSquare) {
-  // takes in a focused sqaure with a piece. If a white piece is selected, returns true if white in check or if a black piece is selected and black king in check. False if king not in check
-  const pieceInitial = focusedSquare.childNodes[0].id;
+export function isCheck(color, board) {  // if color -> white, sees is white is in check.
+    //const pieceInitial = focusedSquare.childNodes[0].id
 
-  const color = pieceInitial === pieceInitial.toUpperCase() ? "white" : "black";
+    const opponentColor = color === "white" ? "black" : "white"
 
-  const piecesPosition = getPiecesPosition();
+    const allThreatenedPieces = getAllThreatenedPieces(board, opponentColor)  // array of all threatened pieces on previewBoard
 
-  // iterating thru the board
+    for (const threatenedPiece of allThreatenedPieces) { // [p,r,r,k,q] -> True (in check)  
+        if (threatenedPiece.piece === "k" || threatenedPiece.piece === "K") {
+            // getAllLegalMovesOnCheck(focusedSquare)
 
-  const allThreatenedPieces = getAllThreatenedPieces(piecesPosition, color); // pieces threatened by the opponent
+            return true
 
-  for (const threatenedPiece of allThreatenedPieces) {
-    // threatenedPiece => {position: 00, piece: "R"}
-    return threatenedPiece.piece === "k" || threatenedPiece.piece === "K";
-  }
+        } 
+    }
+    return false
 }
 
-// iterate thru opponents pieces
-// get all arrays of legal moves
-// check if your own king is inside any of the arrays
-// if so -> check
-// else default onClick

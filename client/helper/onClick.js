@@ -1,10 +1,15 @@
 import { rotate } from "../board/rotateBoard.js";
 import { getLegalMoves } from "./getLegalMoves.js";
-import { getThreatenedPieces } from "./getThreatenedPieces.js";
+import { getPiecesPosition } from "./getPiecesPosition.js";
 import { isCheck } from "./isCheck.js";
+import { isCheckMate } from "./isCheckMate.js";
 import { isTurn } from "./isTurn.js";
+
 import { onEnPassantforWhite } from "./onEnPassant.js";
 import { onEnPassantforBlack } from "./onEnPassant.js";
+
+import { previewBoard } from "./previewBoard.js";
+
 
 const focused = []; // contains selected square element, or empty if nothing selected
 export let moveHistory = [];
@@ -18,8 +23,6 @@ function addMove(startPosition, endPosition) {
 // selecting a square
 function selectSquare(targetSquare) {
   if (targetSquare.innerHTML === "") return; // if square is empty: return
-
-  getThreatenedPieces(targetSquare);
   focused.push(targetSquare);
   targetSquare.classList.add("selected");
 }
@@ -34,6 +37,7 @@ function movePiece(focusedSquare, targetSquare) {
 
     // check if the move is legal
 
+
     const legalMoves = getLegalMoves(focusedSquare);
 
     if (
@@ -42,6 +46,17 @@ function movePiece(focusedSquare, targetSquare) {
       isCheck(focusedSquare)
     ) {
       // if not legal move or not your turn
+
+    const pieceInitial = focusedSquare.childNodes[0].id
+    const color = pieceInitial === pieceInitial.toUpperCase() ? "white" : "black"
+    const currentBoard = getPiecesPosition().reverse()
+    
+    const previewedBoard = previewBoard(pieceInitial, focusedSquare.id, targetSquare.id)  // make preview of the board after move
+    const legalMoves = getLegalMoves(focusedSquare, currentBoard);
+
+    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(color, previewedBoard)) {   
+      // if not legal move or not your turn or it would result in check
+
       // if not a legal move
       if (targetSquare.innerHTML === "") {
         // empty square
@@ -65,10 +80,22 @@ function movePiece(focusedSquare, targetSquare) {
 
       onEnPassantforBlack(moveHistory);
 
+
+      // Move completed
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
       focusedSquare.innerHTML = ""; // remove piece from old square
       focused.push(targetSquare);
       targetSquare.classList.add("selected");
+
+      const currentBoard = getPiecesPosition().reverse()
+      const opponentColor = color === "white" ? "black" : "white"
+      
+      if (isCheck(opponentColor, currentBoard)) {
+        if (isCheckMate(opponentColor, currentBoard)) {
+          
+          console.log('CHECKMATE DUMBASS')
+        }
+      } 
 
       // rotate()
     }
