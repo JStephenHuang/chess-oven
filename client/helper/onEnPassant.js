@@ -1,4 +1,4 @@
-function checkEnPassant(moveHistory, pawn, oppPawn) {
+function checkEnPassant(moveHistory, pawn, oppPawn, startRow) {
   if (moveHistory.length < 3) {
     return;
   }
@@ -17,7 +17,12 @@ function checkEnPassant(moveHistory, pawn, oppPawn) {
     const deltaRow = Math.abs(endPositionRow - secondEndRow);
     const endCol = endPosition[1];
 
-    if (endCol === secondCol && lastMove.end[0] === oppPawn && deltaRow === 1) {
+    if (
+      endCol === secondCol &&
+      lastMove.end[0] === oppPawn &&
+      deltaRow === 1 &&
+      lastMove.start[2] === startRow
+    ) {
       const passantId = `${secondCol}${secondEndRow}`;
       const passantSquare = document.getElementById(passantId);
       passantSquare.innerHTML = "";
@@ -27,11 +32,11 @@ function checkEnPassant(moveHistory, pawn, oppPawn) {
 }
 
 function onEnPassantforWhite(moveHistory) {
-  checkEnPassant(moveHistory, "p", "P");
+  checkEnPassant(moveHistory, "p", "P", "4");
 }
 
 function onEnPassantforBlack(moveHistory) {
-  checkEnPassant(moveHistory, "P", "p");
+  checkEnPassant(moveHistory, "P", "p", "3");
 }
 
 export { onEnPassantforWhite, onEnPassantforBlack };
