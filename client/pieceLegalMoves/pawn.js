@@ -48,7 +48,7 @@ export function getPawnLegalMoves(initial, position, board) {
       if (parseInt(passantCol) === col - 1) {
         legalMoves.push(`${col - 1}${row + 1}`);
         let passantId = `${col - 1}${row}`;
-        console.log(passantId);
+
         let passantSquare = document.getElementById(passantId);
         // if (isEnPassant(startPosition, endPosition)) {
         //   passantSquare.innerHTML = "";
@@ -66,7 +66,6 @@ export function getPawnLegalMoves(initial, position, board) {
     }
   }
   if (row === 3 && initial === "p") {
-    console.log(lastMove);
     const startPosition = lastMove.start;
     const endPosition = lastMove.end; // end . ? for i => object[i]
     // handleEnPassantforBlack(startPosition, endPosition, col, row);
@@ -74,13 +73,10 @@ export function getPawnLegalMoves(initial, position, board) {
     let endRow = endPosition[2];
     let deltaRow = startRow - endRow;
     let passantCol = endPosition[1];
-    console.log(endPosition);
-    console.log(passantCol);
 
     let passantId = `${passantCol - 1}${endRow}`;
-    console.log(passantId);
+
     if (endPosition[0] === "P" && endRow === "3" && Math.abs(deltaRow) === 2) {
-      console.log(col);
       if (parseInt(passantCol) === col - 1) {
         legalMoves.push(`${col - 1}${row - 1}`);
         passantId = `${col - 1}${row}`;
@@ -93,6 +89,6 @@ export function getPawnLegalMoves(initial, position, board) {
       }
     }
   }
-  console.log(moveHistory);
+
   return legalMoves;
 }

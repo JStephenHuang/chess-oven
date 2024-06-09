@@ -25,8 +25,6 @@ function selectSquare(targetSquare) {
 }
 // moving a piece
 function movePiece(focusedSquare, targetSquare) {
-  console.log(focusedSquare);
-
   if (focusedSquare.id === targetSquare.id) {
     // if user selected the same square, unselect it
     focusedSquare.classList.remove("selected");
@@ -64,7 +62,7 @@ function movePiece(focusedSquare, targetSquare) {
       let endSquare = `${focusedSquare.childNodes[0].id}${targetSquare.id}`;
       let passantResultsWhite = onEnPassantforWhite(moveHistory);
       let passantResultsBlack = onEnPassantforBlack(moveHistory);
-      console.log(passantResultsWhite);
+
       if (moveHistory !== "" && passantResultsWhite !== undefined) {
         if (passantResultsWhite[0] === true);
         {
