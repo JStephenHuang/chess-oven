@@ -60,22 +60,12 @@ function movePiece(focusedSquare, targetSquare) {
       );
       let startSquare = `${focusedSquare.childNodes[0].id}${focusedSquare.id}`;
       let endSquare = `${focusedSquare.childNodes[0].id}${targetSquare.id}`;
-      let passantResultsWhite = onEnPassantforWhite(moveHistory);
-      let passantResultsBlack = onEnPassantforBlack(moveHistory);
 
-      if (moveHistory !== "" && passantResultsWhite !== undefined) {
-        if (passantResultsWhite[0] === true);
-        {
-          let passantSquare = document.getElementById(passantResultsWhite[1]);
-          passantSquare.innerHTML = "";
-        }
+      if (moveHistory !== "") {
+        onEnPassantforWhite(moveHistory);
       }
-      if (moveHistory !== "" && passantResultsBlack !== undefined) {
-        if (passantResultsBlack[0] === true);
-        {
-          let passantSquare = document.getElementById(passantResultsBlack[1]);
-          passantSquare.innerHTML = "";
-        }
+      if (moveHistory !== "") {
+        onEnPassantforBlack(moveHistory);
       }
 
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square

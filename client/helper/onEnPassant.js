@@ -1,75 +1,37 @@
-function onEnPassantforWhite(moveHistory) {
-  let lastMove = moveHistory[moveHistory.length - 1];
-  let secondLastMove = moveHistory[moveHistory.length - 2];
-
-  if (lastMove === undefined || secondLastMove === undefined) {
+function checkEnPassant(moveHistory, pawn, oppPawn) {
+  if (moveHistory.length < 3) {
     return;
   }
+  const lastMove = moveHistory[moveHistory.length - 1];
+  const secondLastMove = moveHistory[moveHistory.length - 2];
 
-  let secondStartPosition = secondLastMove.start;
-  let secondEndPosition = secondLastMove.end;
-  let secondStartRow = secondStartPosition[2];
-  let secondEndRow = secondEndPosition[2];
-  let secondCol = secondStartPosition[1];
-  let secondDeltaRow = secondStartRow - secondEndRow;
+  const secondStartPosition = secondLastMove.start;
+  const secondStartRow = secondStartPosition[2];
+  const secondEndRow = secondLastMove.end[2];
+  const secondCol = secondStartPosition[1];
+  const secondDeltaRow = secondStartRow - secondEndRow;
 
-  if (secondLastMove.end[0] === "p" && Math.abs(secondDeltaRow) === 2) {
-    let startPosition = lastMove.start;
-    let endPosition = lastMove.end;
-    let endPositionRow = endPosition[2];
-    let deltaRow = endPositionRow - secondEndRow;
-    let endCol = endPosition[1];
+  if (secondLastMove.end[0] === pawn && Math.abs(secondDeltaRow) === 2) {
+    const endPosition = lastMove.end;
+    const endPositionRow = endPosition[2];
+    const deltaRow = Math.abs(endPositionRow - secondEndRow);
+    const endCol = endPosition[1];
 
-    if (
-      endCol === secondCol &&
-      lastMove.end[0] === "P" &&
-      Math.abs(deltaRow) === 1
-    ) {
-      let passantResults = [];
-      passantResults.push(true);
-      let passantId = `${secondCol}${secondEndRow}`;
-      passantResults.push(passantId);
-
-      return passantResults;
+    if (endCol === secondCol && lastMove.end[0] === oppPawn && deltaRow === 1) {
+      const passantId = `${secondCol}${secondEndRow}`;
+      const passantSquare = document.getElementById(passantId);
+      passantSquare.innerHTML = "";
+      return;
     }
   }
 }
-export { onEnPassantforWhite };
+
+function onEnPassantforWhite(moveHistory) {
+  checkEnPassant(moveHistory, "p", "P");
+}
 
 function onEnPassantforBlack(moveHistory) {
-  let lastMove = moveHistory[moveHistory.length - 1];
-  let secondLastMove = moveHistory[moveHistory.length - 2];
-
-  if (lastMove === undefined || secondLastMove === undefined) {
-    return;
-  }
-
-  let secondStartPosition = secondLastMove.start;
-  let secondEndPosition = secondLastMove.end;
-  let secondStartRow = secondStartPosition[2];
-  let secondEndRow = secondEndPosition[2];
-  let secondCol = secondStartPosition[1];
-  let secondDeltaRow = secondStartRow - secondEndRow;
-
-  if (secondLastMove.end[0] === "P" && Math.abs(secondDeltaRow) === 2) {
-    let startPosition = lastMove.start;
-    let endPosition = lastMove.end;
-    let endPositionRow = endPosition[2];
-    let deltaRow = endPositionRow - secondEndRow;
-    let endCol = endPosition[1];
-
-    if (
-      endCol === secondCol &&
-      lastMove.end[0] === "p" &&
-      Math.abs(deltaRow) === 1
-    ) {
-      let passantResults = [];
-      passantResults.push(true);
-      let passantId = `${secondCol}${secondEndRow}`;
-      passantResults.push(passantId);
-
-      return passantResults;
-    }
-  }
+  checkEnPassant(moveHistory, "P", "p");
 }
-export { onEnPassantforBlack };
+
+export { onEnPassantforWhite, onEnPassantforBlack };
