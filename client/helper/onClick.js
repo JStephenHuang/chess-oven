@@ -3,23 +3,30 @@ import { getLegalMoves } from "./getLegalMoves.js";
 import { getThreatenedPieces } from "./getThreatenedPieces.js";
 import { isCheck } from "./isCheck.js";
 import { isTurn } from "./isTurn.js";
+import { onEnPassantforWhite } from "./onEnPassant.js";
+import { onEnPassantforBlack } from "./onEnPassant.js";
 
 const focused = []; // contains selected square element, or empty if nothing selected
-const moveHistory = []
+export let moveHistory = [];
+function addMove(startPosition, endPosition) {
+  moveHistory.push({
+    start: startPosition,
+    end: endPosition,
+  });
+}
 
 // selecting a square
 function selectSquare(targetSquare) {
   if (targetSquare.innerHTML === "") return; // if square is empty: return
 
-
-  getThreatenedPieces(targetSquare)
+  getThreatenedPieces(targetSquare);
   focused.push(targetSquare);
   targetSquare.classList.add("selected");
-
 }
-
 // moving a piece
 function movePiece(focusedSquare, targetSquare) {
+  console.log(focusedSquare);
+
   if (focusedSquare.id === targetSquare.id) {
     // if user selected the same square, unselect it
     focusedSquare.classList.remove("selected");
@@ -29,12 +36,14 @@ function movePiece(focusedSquare, targetSquare) {
 
     // check if the move is legal
 
-    
-    
     const legalMoves = getLegalMoves(focusedSquare);
 
-
-    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(focusedSquare)) {   // if not legal move or not your turn
+    if (
+      !legalMoves.includes(targetSquare.id) ||
+      !isTurn(moveHistory, focusedSquare) ||
+      isCheck(focusedSquare)
+    ) {
+      // if not legal move or not your turn
       // if not a legal move
       if (targetSquare.innerHTML === "") {
         // empty square
@@ -43,9 +52,33 @@ function movePiece(focusedSquare, targetSquare) {
         unselectSquare(focusedSquare);
         selectSquare(targetSquare);
       }
-    } else { // make the move
+    } else {
+      // make the move
 
-      moveHistory.push(`${focusedSquare.childNodes[0].id}${targetSquare.id}`) 
+      // moveHistory.push(`${focusedSquare.childNodes[0].id}${targetSquare.id}`);
+      addMove(
+        `${focusedSquare.childNodes[0].id}${focusedSquare.id}`,
+        `${focusedSquare.childNodes[0].id}${targetSquare.id}`
+      );
+      let startSquare = `${focusedSquare.childNodes[0].id}${focusedSquare.id}`;
+      let endSquare = `${focusedSquare.childNodes[0].id}${targetSquare.id}`;
+      let passantResultsWhite = onEnPassantforWhite(moveHistory);
+      let passantResultsBlack = onEnPassantforBlack(moveHistory);
+      console.log(passantResultsWhite);
+      if (moveHistory !== "" && passantResultsWhite !== undefined) {
+        if (passantResultsWhite[0] === true);
+        {
+          let passantSquare = document.getElementById(passantResultsWhite[1]);
+          passantSquare.innerHTML = "";
+        }
+      }
+      if (moveHistory !== "" && passantResultsBlack !== undefined) {
+        if (passantResultsBlack[0] === true);
+        {
+          let passantSquare = document.getElementById(passantResultsBlack[1]);
+          passantSquare.innerHTML = "";
+        }
+      }
 
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
       focusedSquare.innerHTML = ""; // remove piece from old square
@@ -59,7 +92,7 @@ function movePiece(focusedSquare, targetSquare) {
 
 function unselectSquare(focusedSquare) {
   focusedSquare.classList.remove("selected");
-  focused.pop()
+  focused.pop();
 }
 
 export function onClick(event) {
