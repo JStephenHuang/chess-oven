@@ -61,12 +61,9 @@ function movePiece(focusedSquare, targetSquare) {
       let startSquare = `${focusedSquare.childNodes[0].id}${focusedSquare.id}`;
       let endSquare = `${focusedSquare.childNodes[0].id}${targetSquare.id}`;
 
-      if (moveHistory !== "") {
-        onEnPassantforWhite(moveHistory);
-      }
-      if (moveHistory !== "") {
-        onEnPassantforBlack(moveHistory);
-      }
+      onEnPassantforWhite(moveHistory);
+
+      onEnPassantforBlack(moveHistory);
 
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
       focusedSquare.innerHTML = ""; // remove piece from old square
