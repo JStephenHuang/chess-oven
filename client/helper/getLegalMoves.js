@@ -7,6 +7,7 @@ import { getKingLegalMoves } from "../pieceLegalMoves/king.js";
 import { getQueenLegalMoves } from "../pieceLegalMoves/queen.js";
 
 // takes in a selected (focused) square with a piece on it, returns all legal moves
+
 export function getLegalMoves(focusedSquare, board) {
 
   // onCheck => if check return another set of array instead of the legal move below
@@ -30,10 +31,11 @@ export function getLegalMoves(focusedSquare, board) {
     q: getQueenLegalMoves,
     Q: getQueenLegalMoves,
     k: getKingLegalMoves,
-    K: getKingLegalMoves
+    K: getKingLegalMoves,
   };
-  
+
   return getLegalMovesMap[pieceInitial](pieceInitial, position, board);
+
 }
 
 

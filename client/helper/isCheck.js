@@ -19,3 +19,4 @@ export function isCheck(color, board) {  // if color -> white, sees is white is 
     }
     return false
 }
+
