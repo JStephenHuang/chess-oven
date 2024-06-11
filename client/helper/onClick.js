@@ -9,11 +9,11 @@ import { onEnPassant } from "./onEnPassant.js";
 
 import { previewBoard } from "./previewBoard.js";
 
-
 const focused = []; // contains selected square element, or empty if nothing selected
 export const moveHistory = [];
-function addMove(startPosition, endPosition) {
+function addMove(pieceInitial, startPosition, endPosition) {
   moveHistory.push({
+    initial: pieceInitial,
     start: startPosition,
     end: endPosition,
   });
@@ -36,17 +36,25 @@ function movePiece(focusedSquare, targetSquare) {
 
     // check if the move is legal
 
+    // if not legal move or not your turn
 
-      // if not legal move or not your turn
+    const pieceInitial = focusedSquare.childNodes[0].id;
+    const color =
+      pieceInitial === pieceInitial.toUpperCase() ? "white" : "black";
+    const currentBoard = getPiecesPosition().reverse();
 
-    const pieceInitial = focusedSquare.childNodes[0].id
-    const color = pieceInitial === pieceInitial.toUpperCase() ? "white" : "black"
-    const currentBoard = getPiecesPosition().reverse()
-    
-    const previewedBoard = previewBoard(pieceInitial, focusedSquare.id, targetSquare.id)  // make preview of the board after move
+    const previewedBoard = previewBoard(
+      pieceInitial,
+      focusedSquare.id,
+      targetSquare.id
+    ); // make preview of the board after move
     const legalMoves = getLegalMoves(focusedSquare, currentBoard);
 
-    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(color, previewedBoard)) {   
+    if (
+      !legalMoves.includes(targetSquare.id) ||
+      !isTurn(moveHistory, focusedSquare) ||
+      isCheck(color, previewedBoard)
+    ) {
       // if not legal move or not your turn or it would result in check
 
       // if not a legal move
@@ -61,11 +69,12 @@ function movePiece(focusedSquare, targetSquare) {
       // make the move
       // moveHistory.push(`${focusedSquare.childNodes[0].id}${targetSquare.id}`);
       addMove(
-        `${focusedSquare.childNodes[0].id}${focusedSquare.id}`,
-        `${focusedSquare.childNodes[0].id}${targetSquare.id}`
+        `${focusedSquare.childNodes[0].id}`,
+        `${focusedSquare.id}`,
+        `${targetSquare.id}`
       );
 
-      onEnPassant(moveHistory)
+      onEnPassant(moveHistory);
 
       // Move completed
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
@@ -73,15 +82,14 @@ function movePiece(focusedSquare, targetSquare) {
       focused.push(targetSquare);
       targetSquare.classList.add("selected");
 
-      const currentBoard = getPiecesPosition().reverse()
-      const opponentColor = color === "white" ? "black" : "white"
-      
+      const currentBoard = getPiecesPosition().reverse();
+      const opponentColor = color === "white" ? "black" : "white";
+
       if (isCheck(opponentColor, currentBoard)) {
         if (isCheckMate(opponentColor, currentBoard)) {
-          
-          console.log('CHECKMATE DUMBASS')
+          console.log("CHECKMATE DUMBASS");
         }
-      } 
+      }
 
       // rotate()
     }

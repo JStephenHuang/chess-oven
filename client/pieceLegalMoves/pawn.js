@@ -40,11 +40,12 @@ export function getPawnLegalMoves(initial, position, board) {
   if (row === 4 && initial === "P") {
     const startPosition = lastMove.start;
     const endPosition = lastMove.end; // end . ? for i => object[i]
-    const startRow = startPosition[2];
-    const endRow = endPosition[2];
+    const startRow = startPosition[1];
+    const endRow = endPosition[1];
+    const pieceInitial = lastMove.initial;
     const deltaRow = Math.abs(startRow - endRow);
-    const passantCol = endPosition[1];
-    if (endPosition[0] === "p" && endRow === "4" && deltaRow === 2) {
+    const passantCol = endPosition[0]; //changed
+    if (pieceInitial === "p" && endRow === "4" && deltaRow === 2) {
       if (parseInt(passantCol) === col - 1) {
         legalMoves.push(`${col - 1}${row + 1}`);
       }
@@ -56,12 +57,12 @@ export function getPawnLegalMoves(initial, position, board) {
   if (row === 3 && initial === "p") {
     const startPosition = lastMove.start;
     const endPosition = lastMove.end;
-    const startRow = startPosition[2];
-    const endRow = endPosition[2];
+    const startRow = startPosition[1];
+    const endRow = endPosition[1];
     const deltaRow = Math.abs(startRow - endRow);
-    const passantCol = endPosition[1];
-
-    if (endPosition[0] === "P" && endRow === "3" && deltaRow === 2) {
+    const passantCol = endPosition[0];
+    const pieceInitial = lastMove.initial;
+    if (pieceInitial === "P" && endRow === "3" && deltaRow === 2) {
       if (parseInt(passantCol) === col - 1) {
         legalMoves.push(`${col - 1}${row - 1}`);
       }
