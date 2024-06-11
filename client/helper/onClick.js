@@ -6,6 +6,7 @@ import { isCheckMate } from "./isCheckMate.js";
 import { isTurn } from "./isTurn.js";
 
 import { onEnPassant } from "./onEnPassant.js";
+import { checkPromotion } from "./checkPromotion.js";
 
 import { previewBoard } from "./previewBoard.js";
 
@@ -26,7 +27,7 @@ function selectSquare(targetSquare) {
   targetSquare.classList.add("selected");
 }
 // moving a piece
-function movePiece(focusedSquare, targetSquare) {
+async function movePiece(focusedSquare, targetSquare) {
   if (focusedSquare.id === targetSquare.id) {
     // if user selected the same square, unselect it
     focusedSquare.classList.remove("selected");
@@ -66,6 +67,11 @@ function movePiece(focusedSquare, targetSquare) {
       );
 
       onEnPassant(moveHistory)
+
+      // check for promotion
+      const pieceInitial = focusedSquare.childNodes[0].id
+   
+      await checkPromotion(pieceInitial, focusedSquare, targetSquare)
 
       // Move completed
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
@@ -108,6 +114,7 @@ export function onClick(event) {
     const focusedSquare = focused[0]; // our old square
 
     movePiece(focusedSquare, targetSquare);
+    
   }
 
   // if there are two squares selected:
