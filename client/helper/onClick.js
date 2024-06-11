@@ -3,6 +3,7 @@ import { getLegalMoves } from "./getLegalMoves.js";
 import { getPiecesPosition } from "./getPiecesPosition.js";
 import { isCheck } from "./isCheck.js";
 import { isCheckMate } from "./isCheckMate.js";
+import { isStalemate } from "./isStalemate.js";
 import { isTurn } from "./isTurn.js";
 
 import { onEnPassant } from "./onEnPassant.js";
@@ -47,7 +48,7 @@ async function movePiece(focusedSquare, targetSquare) {
     const previewedBoard = previewBoard(pieceInitial, focusedSquare.id, targetSquare.id)  // make preview of the board after move
     const legalMoves = getLegalMoves(focusedSquare, currentBoard);
 
-    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(color, previewedBoard)) {   
+    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(previewedBoard, color)) {   
       // if not legal move or not your turn or it would result in check
 
       // if not a legal move
@@ -79,15 +80,24 @@ async function movePiece(focusedSquare, targetSquare) {
       focused.push(targetSquare);
       targetSquare.classList.add("selected");
 
+      setTimeout(() => {
+        if (isCheck(currentBoard, opponentColor)) {
+          if (isCheckMate(currentBoard, opponentColor)) {
+            
+            alert("CHECKMATE")
+  
+          }
+        }
+  
+        if (isStalemate(currentBoard, opponentColor)) {
+          alert("STALEMATE")
+        }
+      }, 1);
+
       const currentBoard = getPiecesPosition().reverse()
       const opponentColor = color === "white" ? "black" : "white"
       
-      if (isCheck(opponentColor, currentBoard)) {
-        if (isCheckMate(opponentColor, currentBoard)) {
-          
-          console.log('CHECKMATE DUMBASS')
-        }
-      } 
+     
 
       // rotate()
     }
