@@ -5,28 +5,36 @@ import { isCheck } from "./isCheck.js";
 import { isCheckMate } from "./isCheckMate.js";
 import { isStalemate } from "./isStalemate.js";
 import { isTurn } from "./isTurn.js";
+import { isCastling } from "./isCastling.js";
 
 import { onEnPassant } from "./onEnPassant.js";
 import { checkPromotion } from "./checkPromotion.js";
 
 import { previewBoard } from "./previewBoard.js";
 
-
-const focused = []; // contains selected square element, or empty if nothing selected
+export const focused = []; // contains selected square element, or empty if nothing selected
 export const moveHistory = [];
-function addMove(startPosition, endPosition) {
+
+export function addMove(pieceInitial, startPosition, endPosition) {
   moveHistory.push({
+    initial: pieceInitial,
     start: startPosition,
     end: endPosition,
   });
 }
 
 // selecting a square
-function selectSquare(targetSquare) {
+export function selectSquare(targetSquare) {
   if (targetSquare.innerHTML === "") return; // if square is empty: return
   focused.push(targetSquare);
   targetSquare.classList.add("selected");
 }
+
+export function unselectSquare(focusedSquare) {
+  focusedSquare.classList.remove("selected");
+  focused.pop();
+}
+
 // moving a piece
 async function movePiece(focusedSquare, targetSquare) {
   if (focusedSquare.id === targetSquare.id) {
@@ -38,14 +46,23 @@ async function movePiece(focusedSquare, targetSquare) {
 
     // check if the move is legal
 
+    // if not legal move or not your turn
 
-      // if not legal move or not your turn
+    const pieceInitial = focusedSquare.childNodes[0].id;
+    const color =
+      pieceInitial === pieceInitial.toUpperCase() ? "white" : "black";
+    const currentBoard = getPiecesPosition().reverse();
 
-    const pieceInitial = focusedSquare.childNodes[0].id
-    const color = pieceInitial === pieceInitial.toUpperCase() ? "white" : "black"
-    const currentBoard = getPiecesPosition().reverse()
-    
-    const previewedBoard = previewBoard(pieceInitial, focusedSquare.id, targetSquare.id)  // make preview of the board after move
+    const previewedBoard = previewBoard(
+      pieceInitial,
+      focusedSquare.id,
+      targetSquare.id
+    ); // make preview of the board after move
+
+    if (isCastling(pieceInitial, focusedSquare, targetSquare)) {
+      return;
+    }
+
     const legalMoves = getLegalMoves(focusedSquare, currentBoard);
 
     if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(previewedBoard, color)) {   
@@ -63,8 +80,9 @@ async function movePiece(focusedSquare, targetSquare) {
       // make the move
       // moveHistory.push(`${focusedSquare.childNodes[0].id}${targetSquare.id}`);
       addMove(
-        `${focusedSquare.childNodes[0].id}${focusedSquare.id}`,
-        `${focusedSquare.childNodes[0].id}${targetSquare.id}`
+        `${focusedSquare.childNodes[0].id}`,
+        `${focusedSquare.id}`,
+        `${targetSquare.id}`
       );
 
       onEnPassant(moveHistory)
@@ -96,18 +114,12 @@ async function movePiece(focusedSquare, targetSquare) {
 
       const currentBoard = getPiecesPosition().reverse()
       const opponentColor = color === "white" ? "black" : "white"
-      
-     
 
       // rotate()
     }
   }
 }
 
-function unselectSquare(focusedSquare) {
-  focusedSquare.classList.remove("selected");
-  focused.pop();
-}
 
 export function onClick(event) {
   const targetSquare = event.target; // new selected square

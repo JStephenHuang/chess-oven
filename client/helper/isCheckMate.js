@@ -1,6 +1,6 @@
-import { getAllLegalMovesOnCheck } from "./getAllLegalMovesOnCheck.js"
+import { getAllLegalMovesWithCheck } from "./getAllLegalMovesWithCheck.js"
 
 export function isCheckMate(board, color) { // if color -> black, sees if black is checkmated.
 
-    return getAllLegalMovesOnCheck(board, color).length === 0
+    return getAllLegalMovesWithCheck(board, color).length === 0
 }

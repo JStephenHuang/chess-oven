@@ -1,8 +1,8 @@
 import { isCheck } from "./isCheck.js"
-import { getAllLegalMovesOnCheck } from "./getAllLegalMovesOnCheck.js"
+import { getAllLegalMovesWithCheck } from "./getAllLegalMovesWithCheck.js"
 
 export function isStalemate(board, color) {
-    if (getAllLegalMovesOnCheck(board, color).length === 0 && !isCheck(board, color)) {
+    if (getAllLegalMovesWithCheck(board, color).length === 0 && !isCheck(board, color)) {
         return true
     }
 
