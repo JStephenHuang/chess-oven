@@ -1,19 +1,116 @@
-import { moveHistory } from "./onClick.js";
+import { previewBoard } from "./previewBoard.js";
+import { moveHistory } from "../helper/onClick.js";
+import { isCheck } from "./isCheck.js";
+import { addMove, focused, unselectSquare, selectSquare } from "../helper/onClick.js";
 
-// const f1 = "50";
-// const g1 = "60";
+
+export function checkCastle(pieceInitial, focusedSquare, targetSquare) {
+  if (pieceInitial !== "k" && pieceInitial !== "K") return false
+
+  if (!getLegalCastles(pieceInitial).includes(targetSquare.id)) return false
+
+  // if its a legal castle, move the king to targetSquare, add to moveHistory, call initiateCastle
+  addMove(
+    `${focusedSquare.childNodes[0].id}`,
+    `${focusedSquare.id}`,
+    `${targetSquare.id}`
+  );
+
+  targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
+  focusedSquare.innerHTML = ""; // remove piece from old square
+  focused.push(targetSquare);
+  targetSquare.classList.add("selected");
+
+  initiatedCastle(moveHistory)
+
+  return true
+
+  }
+
+export function getLegalCastles(initial) {
+  const isWhite = initial === initial.toUpperCase()
+  const legalCastles = []
+  const shortCastleArray = []
+  const longCastleArray = []
+  
+
+  const initialKingPosition = isWhite ? '40' : '47';
+  const castlingRow = isWhite ? 0 : 7
+  
+  // short 
+  for (let i = 5; i <= 6; i ++) {
+ 
+    const finalKingPosition = `${i}${castlingRow}`  // '4_', '5_', '6_'
+    if (i !== 4) {
+      const square = document.getElementById(finalKingPosition);
+      
+      if (square.innerHTML !== "") {
+        shortCastleArray.push(false)
+        break
+      }
+
+      shortCastleArray.push(true)
+    }
+    
+    const previewedBoard = previewBoard(initial, initialKingPosition, finalKingPosition)
+
+    if (isCheck(isWhite ? "white" : "black", previewedBoard)) {
+      shortCastleArray.push(false)
+      break
+    }
+    shortCastleArray.push(true)
+  }
+
+  // long
+
+  for (let i = 3; i <= 2; i --) {
+    const finalKingPosition = `${i}${castlingRow}`  // '4_', '3_', '2_'
+      if (i !== 4) {
+        const square = document.getElementById(finalKingPosition);
+        if (square.innerHTML !== "") {
+          longCastleArray.push(false)
+          break
+        }
+        longCastleArray.push(true)
+      } 
+    const previewedBoard = previewBoard(initial, initialKingPosition, finalKingPosition)
+    
+    if (isCheck(isWhite ? "white" : "black", previewedBoard)) {
+      longCastleArray.push(false)
+      break
+    }
+    longCastleArray.push(true)
+  }
+
+  if (
+    !shortCastleArray.includes(false) && 
+    moveHistory.filter(move => move.start === `7${castlingRow}` || move.start === `4${castlingRow}`).length === 0
+  ) {
+    legalCastles.push(`6${castlingRow}`)
+  }
+
+  if (
+    !longCastleArray.includes(false) &&
+    moveHistory.filter(move => move.start === `0${castlingRow}` || move.start === `4${castlingRow}`).length === 0
+  ) {
+    legalCastles.push(`2${castlingRow}`)
+  }
+
+  return legalCastles
+} 
 
 export function checkShortWhiteCastle(moveHistory, Board, initial, legalMoves) {
   //short white castle
-  const f1 = "50";
-  const g1 = "60";
+  const f1 = "50"; // final position rook
+  const g1 = "60"; // final position king
 
   const f1Square = document.getElementById(f1);
   const g1Square = document.getElementById(g1);
 
+
   // long white castle
 
-  moveHistory.forEach((move) => {   // checks moveHistory for any white king moves, h-rook moves, and if g1 + f1 are
+  moveHistory.forEach((move) => {   // checks moveHistory for any white king moves, h-rook moves, and if g1 + f1 are empty
     if (    
       move.start !== "70" &&
       move.start != "40" &&
@@ -89,72 +186,52 @@ export function checkLongBlackCastle(moveHistory, board, initial, legalMoves) {
   });
 }
 
-export function checkCastle() {
-  console.log(g1Square);
-}
+export function initiatedCastle(moveHistory) {      // checks if White or Black has initiated castling, moves rook accordingly
+  const lastMove = moveHistory[moveHistory.length - 1];
+  const { initial, start, end } = lastMove;   // get last move info
 
-export function onCastle(moveHistory, board) {
-  console.log(moveHistory);
-  // console.log(board);
-  // return legal move
-}
+  if (initial === 'k' || initial === 'K') {   
+    const isWhite = initial === 'K';        // isWhite -> True if white, false if black
 
+    const initialKingPosition = isWhite ? '40' : '47';
+    const shortCastleKingPosition = isWhite ? '60' : '67';
+    const longCastleKingPosition = isWhite ? '20' : '27';
 
-export function initiatedCastle(moveHistory) { // checks if player initiated castle, eg moved king to castling square.
-  const lastMove = moveHistory[moveHistory.length-1]
-  console.log(lastMove)
-  const piece = lastMove.initial
-  const start = lastMove.start
-  const end = lastMove.end
-  console.log(piece,start,end)
-
-  if (piece === 'k' || piece === 'K') {
-    if (start === '40') {                   // white 
-      if (end === '60') {  // short castle
-        const rookSquare = document.getElementById('70')
-        rookSquare.innerHTML = ''
-        const newRookSquare = document.getElementById('50')
-        const img = document.createElement("img")
-        img.setAttribute("src", '/client/assets/wR.png')
-        img.setAttribute("id", 'R')
-        img.classList.add('piece')
-        newRookSquare.appendChild(img)
-
-      } else if (end === '20') { // long castle
-        const rookSquare = document.getElementById('00')
-        rookSquare.innerHTML = ''
-        const newRookSquare = document.getElementById('30')
-        const img = document.createElement("img")
-        img.setAttribute("src", '/client/assets/wR.png')
-        img.setAttribute("id", 'R')
-        img.classList.add('piece')
-        newRookSquare.appendChild(img)
-      }
-    } else if (start === '47') {    // black short
-      if (end === '67') {
-        const rookSquare = document.getElementById('77')
-        rookSquare.innerHTML = ''
-        const newRookSquare = document.getElementById('57')
-        const img = document.createElement("img")
-        img.setAttribute("src", '/client/assets/bR.png')
-        img.setAttribute("id", 'r')
-        img.classList.add('piece')
-        newRookSquare.appendChild(img)
-      } else if (end === '27') {
-        const rookSquare = document.getElementById('07')
-        rookSquare.innerHTML = ''
-        const newRookSquare = document.getElementById('37')
-        const img = document.createElement("img")
-        img.setAttribute("src", '/client/assets/bR.png')
-        img.setAttribute("id", 'r')
-        img.classList.add('piece')
-        newRookSquare.appendChild(img)
+    if (start === initialKingPosition) {
+      if (end === shortCastleKingPosition) {
+        // Short castling
+        moveRookForCastling(isWhite, 'short');
+      } else if (end === longCastleKingPosition) {
+        // Long castling
+        moveRookForCastling(isWhite, 'long');
       }
     }
-    return false
   }
 }
 
-export function moveRookForCastle(moveHistory) {
+export function moveRookForCastling(isWhite, castleSide) {    // moves rook according to piece colors and castleSide (short or long)
+  const rookInitialPosition = initialRookPosition(isWhite, castleSide); 
+  const rookFinalPosition = castledRookPosition(isWhite, castleSide);  // gets rook position
 
+  const rookInitialSquare = document.getElementById(rookInitialPosition);
+  const rookFinalSquare =  document.getElementById(rookFinalPosition);
+
+  rookFinalSquare.innerHTML = rookInitialSquare.innerHTML
+  rookInitialSquare.innerHTML = '';  // empties old square
+}
+
+function initialRookPosition(isWhite, castleSide) {
+  if (castleSide === 'short') {
+    return isWhite ? '70' : '77';
+  } else {
+    return isWhite ? '00' : '07';
+  }
+}
+
+function castledRookPosition(isWhite, castleSide) {
+  if (castleSide === 'short') {
+    return isWhite ? '50' : '57';
+  } else {
+    return isWhite ? '30' : '37';
+  }
 }

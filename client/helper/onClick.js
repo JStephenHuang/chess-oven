@@ -4,15 +4,17 @@ import { getPiecesPosition } from "./getPiecesPosition.js";
 import { isCheck } from "./isCheck.js";
 import { isCheckMate } from "./isCheckMate.js";
 import { isTurn } from "./isTurn.js";
+import { checkCastle } from "./checkCastle.js";
 
 import { onEnPassant } from "./onEnPassant.js";
-import { initiatedCastle, moveRookForCastle } from "./checkCastle.js";
+import { initiatedCastle } from "./checkCastle.js";
 
 import { previewBoard } from "./previewBoard.js";
 
-const focused = []; // contains selected square element, or empty if nothing selected
+export const focused = []; // contains selected square element, or empty if nothing selected
 export const moveHistory = [];
-function addMove(pieceInitial, startPosition, endPosition) {
+
+export function addMove(pieceInitial, startPosition, endPosition) {
   moveHistory.push({
     initial: pieceInitial,
     start: startPosition,
@@ -21,11 +23,17 @@ function addMove(pieceInitial, startPosition, endPosition) {
 }
 
 // selecting a square
-function selectSquare(targetSquare) {
+export function selectSquare(targetSquare) {
   if (targetSquare.innerHTML === "") return; // if square is empty: return
   focused.push(targetSquare);
   targetSquare.classList.add("selected");
 }
+
+export function unselectSquare(focusedSquare) {
+  focusedSquare.classList.remove("selected");
+  focused.pop();
+}
+
 // moving a piece
 function movePiece(focusedSquare, targetSquare) {
   if (focusedSquare.id === targetSquare.id) {
@@ -49,6 +57,11 @@ function movePiece(focusedSquare, targetSquare) {
       focusedSquare.id,
       targetSquare.id
     ); // make preview of the board after move
+
+    if (checkCastle(pieceInitial, focusedSquare, targetSquare)) {
+      return
+    }
+
     const legalMoves = getLegalMoves(focusedSquare, currentBoard);
 
     if (
@@ -86,7 +99,7 @@ function movePiece(focusedSquare, targetSquare) {
       // check if player made a castling move
       if (initiatedCastle(moveHistory)) {
         console.log('castled')
-        moveRookForCastle(moveHistory)
+        //moveRookForCastle(moveHistory)
       }
 
       const currentBoard = getPiecesPosition().reverse();
@@ -103,10 +116,6 @@ function movePiece(focusedSquare, targetSquare) {
   }
 }
 
-function unselectSquare(focusedSquare) {
-  focusedSquare.classList.remove("selected");
-  focused.pop();
-}
 
 export function onClick(event) {
   const targetSquare = event.target; // new selected square

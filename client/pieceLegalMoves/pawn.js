@@ -1,7 +1,5 @@
 import { isDifferentColor } from "../helper/isDifferentColor.js";
 import { moveHistory } from "../helper/onClick.js";
-// import { handleEnPassantforWhite } from "../helper/onEnPassant.js";
-// import { handleEnPassantforBlack } from "../helper/onEnPassant.js";
 
 export function getPawnLegalMoves(initial, position, board) {
   const { row, col } = position; // b4: col -> 1,  row -> 3
