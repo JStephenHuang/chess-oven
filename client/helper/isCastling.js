@@ -1,13 +1,16 @@
 import { previewBoard } from "./previewBoard.js";
-import { moveHistory } from "../helper/onClick.js";
+import { moveHistory } from "./onClick.js";
 import { isCheck } from "./isCheck.js";
-import { addMove, focused, unselectSquare, selectSquare } from "../helper/onClick.js";
+import { addMove, focused } from "./onClick.js";
+import { isTurn } from "./isTurn.js";
 
 
-export function checkCastle(pieceInitial, focusedSquare, targetSquare) {
-  if (pieceInitial !== "k" && pieceInitial !== "K") return false
+export function isCastling(initial, focusedSquare, targetSquare) {
+  if (initial !== "k" && initial !== "K") return false
 
-  if (!getLegalCastles(pieceInitial).includes(targetSquare.id)) return false
+  if (!isTurn(moveHistory, focusedSquare)) return false
+
+  if (!getLegalCastles(initial).includes(targetSquare.id)) return false
 
   // if its a legal castle, move the king to targetSquare, add to moveHistory, call initiateCastle
   addMove(
@@ -38,7 +41,7 @@ export function getLegalCastles(initial) {
   const castlingRow = isWhite ? 0 : 7
   
   // short 
-  for (let i = 5; i <= 6; i ++) {
+  for (let i = 4; i <= 6; i ++) {
  
     const finalKingPosition = `${i}${castlingRow}`  // '4_', '5_', '6_'
     if (i !== 4) {
@@ -54,7 +57,7 @@ export function getLegalCastles(initial) {
     
     const previewedBoard = previewBoard(initial, initialKingPosition, finalKingPosition)
 
-    if (isCheck(isWhite ? "white" : "black", previewedBoard)) {
+    if (isCheck(previewedBoard, isWhite ? "white" : "black")) {
       shortCastleArray.push(false)
       break
     }
@@ -63,22 +66,26 @@ export function getLegalCastles(initial) {
 
   // long
 
-  for (let i = 3; i <= 2; i --) {
+  for (let i = 4; i >= 2; i --) {
     const finalKingPosition = `${i}${castlingRow}`  // '4_', '3_', '2_'
       if (i !== 4) {
         const square = document.getElementById(finalKingPosition);
+
         if (square.innerHTML !== "") {
           longCastleArray.push(false)
           break
         }
+
         longCastleArray.push(true)
       } 
     const previewedBoard = previewBoard(initial, initialKingPosition, finalKingPosition)
     
-    if (isCheck(isWhite ? "white" : "black", previewedBoard)) {
+    if (isCheck(previewedBoard, isWhite ? "white" : "black")) {
+
       longCastleArray.push(false)
       break
     }
+
     longCastleArray.push(true)
   }
 
@@ -96,95 +103,10 @@ export function getLegalCastles(initial) {
     legalCastles.push(`2${castlingRow}`)
   }
 
+  console.log(legalCastles, longCastleArray, shortCastleArray)
+
   return legalCastles
 } 
-
-export function checkShortWhiteCastle(moveHistory, Board, initial, legalMoves) {
-  //short white castle
-  const f1 = "50"; // final position rook
-  const g1 = "60"; // final position king
-
-  const f1Square = document.getElementById(f1);
-  const g1Square = document.getElementById(g1);
-
-
-  // long white castle
-
-  moveHistory.forEach((move) => {   // checks moveHistory for any white king moves, h-rook moves, and if g1 + f1 are empty
-    if (    
-      move.start !== "70" &&
-      move.start != "40" &&
-      f1Square.innerHTML === "" &&
-      g1Square.innerHTML === "" &&
-      initial === "K"
-    ) {
-      legalMoves.push("60");
-    }
-  });
-}
-export function checkLongWhiteCastle(moveHistory, board, initial, legalMoves) {
-  const b1 = "10";
-  const c1 = "20";
-  const d1 = "30";
-  const b1Square = document.getElementById(b1);
-  const c1Square = document.getElementById(c1);
-  const d1Square = document.getElementById(d1);
-  moveHistory.forEach((move) => {
-    if (
-      move.start !== "00" &&
-      move.start != "40" &&
-      b1Square.innerHTML === "" &&
-      c1Square.innerHTML === "" &&
-      d1Square.innerHTML === "" &&
-      initial === "K"
-    ) {
-      legalMoves.push("20");
-    }
-  });
-}
-
-export function checkShortBlackCastle(moveHistory, board, initial, legalMoves) {
-  //short white castle
-  const f8 = "57";
-  const g8 = "67";
-  const f1Square = document.getElementById(f8);
-  const g1Square = document.getElementById(g8);
-
-  // long white castle
-
-  moveHistory.forEach((move) => {
-    if (
-      move.start !== "77" &&
-      move.start != "47" &&
-      f1Square.innerHTML === "" &&
-      g1Square.innerHTML === "" &&
-      initial === "k"
-    ) {
-      legalMoves.push("67");
-    }
-  });
-}
-
-export function checkLongBlackCastle(moveHistory, board, initial, legalMoves) {
-  const b8 = "17";
-  const c8 = "27";
-  const d8 = "37";
-  const b8Square = document.getElementById(b8);
-  const c8Square = document.getElementById(c8);
-  const d8Square = document.getElementById(d8);
-  moveHistory.forEach((move) => {
-    if (
-      move.start !== "00" &&
-      move.start != "40" &&
-      b8Square.innerHTML === "" &&
-      c8Square.innerHTML === "" &&
-      d8Square.innerHTML === "" &&
-      initial === "k"
-    ) {
-      legalMoves.push("27");
-    }
-  });
-}
 
 export function initiatedCastle(moveHistory) {      // checks if White or Black has initiated castling, moves rook accordingly
   const lastMove = moveHistory[moveHistory.length - 1];

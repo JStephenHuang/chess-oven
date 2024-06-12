@@ -3,11 +3,12 @@ import { getLegalMoves } from "./getLegalMoves.js";
 import { getPiecesPosition } from "./getPiecesPosition.js";
 import { isCheck } from "./isCheck.js";
 import { isCheckMate } from "./isCheckMate.js";
+import { isStalemate } from "./isStalemate.js";
 import { isTurn } from "./isTurn.js";
-import { checkCastle } from "./checkCastle.js";
+import { isCastling } from "./isCastling.js";
 
 import { onEnPassant } from "./onEnPassant.js";
-import { initiatedCastle } from "./checkCastle.js";
+import { checkPromotion } from "./checkPromotion.js";
 
 import { previewBoard } from "./previewBoard.js";
 
@@ -35,7 +36,7 @@ export function unselectSquare(focusedSquare) {
 }
 
 // moving a piece
-function movePiece(focusedSquare, targetSquare) {
+async function movePiece(focusedSquare, targetSquare) {
   if (focusedSquare.id === targetSquare.id) {
     // if user selected the same square, unselect it
     focusedSquare.classList.remove("selected");
@@ -58,17 +59,13 @@ function movePiece(focusedSquare, targetSquare) {
       targetSquare.id
     ); // make preview of the board after move
 
-    if (checkCastle(pieceInitial, focusedSquare, targetSquare)) {
+    if (isCastling(pieceInitial, focusedSquare, targetSquare)) {
       return;
     }
 
     const legalMoves = getLegalMoves(focusedSquare, currentBoard);
 
-    if (
-      !legalMoves.includes(targetSquare.id) ||
-      !isTurn(moveHistory, focusedSquare) ||
-      isCheck(color, previewedBoard)
-    ) {
+    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(previewedBoard, color)) {   
       // if not legal move or not your turn or it would result in check
 
       // if not a legal move
@@ -88,7 +85,12 @@ function movePiece(focusedSquare, targetSquare) {
         `${targetSquare.id}`
       );
 
-      onEnPassant(moveHistory);
+      onEnPassant(moveHistory)
+
+      // check for promotion
+      const pieceInitial = focusedSquare.childNodes[0].id
+   
+      await checkPromotion(pieceInitial, focusedSquare, targetSquare)
 
       // Move completed
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
@@ -96,20 +98,22 @@ function movePiece(focusedSquare, targetSquare) {
       focused.push(targetSquare);
       targetSquare.classList.add("selected");
 
-      // check if player made a castling move
-      if (initiatedCastle(moveHistory)) {
-        console.log('castled')
-        //moveRookForCastle(moveHistory)
-      }
-
-      const currentBoard = getPiecesPosition().reverse();
-      const opponentColor = color === "white" ? "black" : "white";
-
-      if (isCheck(opponentColor, currentBoard)) {
-        if (isCheckMate(opponentColor, currentBoard)) {
-          console.log("CHECKMATE DUMBASS");
+      setTimeout(() => {
+        if (isCheck(currentBoard, opponentColor)) {
+          if (isCheckMate(currentBoard, opponentColor)) {
+            
+            alert("CHECKMATE")
+  
+          }
         }
-      }
+  
+        if (isStalemate(currentBoard, opponentColor)) {
+          alert("STALEMATE")
+        }
+      }, 1);
+
+      const currentBoard = getPiecesPosition().reverse()
+      const opponentColor = color === "white" ? "black" : "white"
 
       // rotate()
     }
@@ -132,6 +136,7 @@ export function onClick(event) {
     const focusedSquare = focused[0]; // our old square
 
     movePiece(focusedSquare, targetSquare);
+    
   }
 
   // if there are two squares selected:

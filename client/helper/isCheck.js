@@ -1,8 +1,6 @@
 import { getAllThreatenedPieces } from "./getThreatenedPieces.js";
-import { previewBoard } from "./previewBoard.js";
-import { getAllLegalMovesOnCheck } from "./getAllLegalMovesOnCheck.js";
 
-export function isCheck(color, board) {  // if color -> white, sees is white is in check.
+export function isCheck(board, color) {  // if color -> white, sees is white is in check.
     //const pieceInitial = focusedSquare.childNodes[0].id
 
     const opponentColor = color === "white" ? "black" : "white"
@@ -11,7 +9,6 @@ export function isCheck(color, board) {  // if color -> white, sees is white is 
 
     for (const threatenedPiece of allThreatenedPieces) { // [p,r,r,k,q] -> True (in check)  
         if (threatenedPiece.piece === "k" || threatenedPiece.piece === "K") {
-            // getAllLegalMovesOnCheck(focusedSquare)
 
             return true
 

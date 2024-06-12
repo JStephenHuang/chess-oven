@@ -1,10 +1,8 @@
-import { getAllLegalMoves, getLegalMoves } from "./getLegalMoves.js";
-import { getPiecesPosition } from "./getPiecesPosition.js";
-import { getAllThreatenedPieces, getThreatenedPieces } from "./getThreatenedPieces.js";
+import { getAllLegalMoves } from "./getLegalMoves.js";
 import { isCheck } from "./isCheck.js";
 import { previewBoard } from "./previewBoard.js";
 
-export function getAllLegalMovesOnCheck(color, board) {  // takes in a focused square with a piece. If a white piece is selected, returns true if white in check or if a black piece is selected and black king in check. False if king not in check
+export function getAllLegalMovesWithCheck(board, color) {  // takes in a focused square with a piece. If a white piece is selected, returns true if white in check or if a black piece is selected and black king in check. False if king not in check
     const legalMoves = []
 
     // iterating thru the board  
@@ -15,9 +13,8 @@ export function getAllLegalMovesOnCheck(color, board) {  // takes in a focused s
             
             const previewedBoard = previewBoard(legalMove.initial, legalMove.position, move)   // make preview of the board after move
 
-            if (!isCheck(color, previewedBoard)) {
+            if (!isCheck(previewedBoard, color)) {
                 legalMoves.push({position: legalMove.position, piece: legalMove.initial, move: move})
-                
             }
         }
     }
