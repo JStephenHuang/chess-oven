@@ -6,6 +6,7 @@ import { isCheckMate } from "./isCheckMate.js";
 import { isTurn } from "./isTurn.js";
 
 import { onEnPassant } from "./onEnPassant.js";
+import { initiatedCastle, moveRookForCastle } from "./checkCastle.js";
 
 import { previewBoard } from "./previewBoard.js";
 
@@ -81,6 +82,12 @@ function movePiece(focusedSquare, targetSquare) {
       focusedSquare.innerHTML = ""; // remove piece from old square
       focused.push(targetSquare);
       targetSquare.classList.add("selected");
+
+      // check if player made a castling move
+      if (initiatedCastle(moveHistory)) {
+        console.log('castled')
+        moveRookForCastle(moveHistory)
+      }
 
       const currentBoard = getPiecesPosition().reverse();
       const opponentColor = color === "white" ? "black" : "white";

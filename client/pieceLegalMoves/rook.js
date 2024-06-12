@@ -1,9 +1,5 @@
 import { isLegalMove } from "../helper/isLegalMove.js";
 import { moveHistory } from "../helper/onClick.js";
-import { isShortWhiteCastle } from "../helper/onCastle.js";
-import { isLongWhiteCastle } from "../helper/onCastle.js";
-import { isShortBlackCastle } from "../helper/onCastle.js";
-import { isLongBlackCastle } from "../helper/onCastle.js";
 export function getRookLegalMoves(initial, position, board) {
   const { row, col } = position;
   const legalMoves = [];
@@ -42,9 +38,6 @@ export function getRookLegalMoves(initial, position, board) {
   for (const move of rookMoves) {
     isLegalMove(initial, board, move.targetRow, move.targetCol, legalMoves);
   }
-  isShortWhiteCastle(moveHistory, board);
-  isLongWhiteCastle(moveHistory, board);
-  isShortBlackCastle(moveHistory, board);
-  isLongBlackCastle(moveHistory, board);
+ 
   return legalMoves;
 }
