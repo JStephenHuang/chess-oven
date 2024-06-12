@@ -59,7 +59,7 @@ function movePiece(focusedSquare, targetSquare) {
     ); // make preview of the board after move
 
     if (checkCastle(pieceInitial, focusedSquare, targetSquare)) {
-      return
+      return;
     }
 
     const legalMoves = getLegalMoves(focusedSquare, currentBoard);
