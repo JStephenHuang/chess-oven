@@ -48,10 +48,10 @@ img {
   background-color: hsla(120, 100%, 50%, 0.5);
 }
 
-.piece {
+.square img {
   pointer-events: none;
-  width: 100%;
-  aspect-ratio: 1 / 1;
+  width: 90%;
+  height: 90%;
 }
 
 /* PROMOTION POPUP */
