@@ -1,7 +1,9 @@
 import { pause } from "../board.js";
+import { playAudio } from "./playAudio.js";
 
 export function onGameOver(gameState, subtitle) {
   pause();
+  playAudio("checkmate");
   const gameOverPopup = document.getElementById("gameoverPopup");
   const gameStateParagraphElement = document.getElementById("gameState");
   const gameStateSubtitleParagraphElement =

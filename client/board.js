@@ -156,4 +156,4 @@ function restartPopup() {
 
 setMenuFeatures();
 setBoard();
-setTimer(62);
+setTimer(300);
