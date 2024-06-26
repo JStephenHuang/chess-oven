@@ -23,7 +23,7 @@ export async function checkPromotion(
       const imgPiece = document.createElement("img");
       imgPiece.id = initial;
       imgPiece.classList.add("promotion-option");
-      imgPiece.src = `/client/assets/${color}${piece}.png`;
+      imgPiece.src = `./assets/${color}${piece}.png`;
 
       promotionOptions.appendChild(imgPiece);
     }
@@ -32,7 +32,7 @@ export async function checkPromotion(
     const selectedPiece = await showPromotionPopup();
 
     imgElement.id = selectedPiece;
-    imgElement.src = `/client/assets/${color}${selectedPiece}.png`;
+    imgElement.src = `./assets/${color}${selectedPiece}.png`;
   }
 }
 

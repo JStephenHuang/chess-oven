@@ -1,6 +1,7 @@
 import { onClick } from "./helper/onClick.js";
 import { Piece } from "./models/Piece.js";
 import { countdown } from "./helper/countdown.js";
+import { onGameOver } from "./helper/onGameOver.js";
 
 const board = document.getElementById("board");
 
@@ -57,7 +58,7 @@ function setBoard() {
       const piece = new Piece(initial);
 
       const img = document.createElement("img");
-      img.setAttribute("src", `/client/assets/${piece.img}`);
+      img.setAttribute("src", `./assets/${piece.img}`);
       img.setAttribute("id", initial);
       img.classList.add("piece");
 
@@ -105,8 +106,8 @@ function setMenuFeatures() {
 }
 
 function createPopup(message, confirmAction) {
-  const popup = document.createElement('div');
-  popup.className = 'menu-popup';
+  const popup = document.createElement("div");
+  popup.className = "menu-popup";
   popup.innerHTML = `
     <div class="popup-content">
       <p>${message}</p>
@@ -117,18 +118,18 @@ function createPopup(message, confirmAction) {
 
   document.getElementById("btn-container").appendChild(popup);
 
-  const confirmBtn = popup.querySelector('.confirm-btn');
-  const cancelBtn = popup.querySelector('.cancel-btn');
+  const confirmBtn = popup.querySelector(".confirm-btn");
+  const cancelBtn = popup.querySelector(".cancel-btn");
 
-  confirmBtn.addEventListener('click', () => {
+  confirmBtn.addEventListener("click", () => {
     confirmAction();
     closePopup(popup);
   });
 
-  cancelBtn.addEventListener('click', () => closePopup(popup));
+  cancelBtn.addEventListener("click", () => closePopup(popup));
 
   // Close popup when clicking outside
-  popup.addEventListener('click', (e) => {
+  popup.addEventListener("click", (e) => {
     if (e.target === popup) {
       closePopup(popup);
     }
@@ -140,16 +141,16 @@ function closePopup(popup) {
 }
 
 function surrenderPopup() {
-  createPopup('Are you sure you want to surrender?', () => {
+  createPopup("Are you sure you want to surrender?", () => {
+    onGameOver("Surrender", "Fuck you");
     // Add your surrender logic here
-    console.log('Player surrendered');
   });
 }
 
 function restartPopup() {
-  createPopup('Are you sure you want to restart the game?', () => {
-    location.reload()
-    console.log('Game restarted');
+  createPopup("Are you sure you want to restart the game?", () => {
+    location.reload();
+    console.log("Game restarted");
   });
 }
 
