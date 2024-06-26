@@ -1,11 +1,15 @@
 <html lang="en">
   <script type="module" src="board.js" defer></script>
-  <link href="global.css" rel="stylesheet" />
-  <link href="oven.css" rel="stylesheet" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-  />
+
+  <head>
+    <link href="global.css" rel="stylesheet" />
+    <link href="oven.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="icon" type="image/x-icon" href="./client/assets/web-icon.png" />
+  </head>
   <body>
     <div id="root">
       <div style="display: flex; gap: 1rem; align-items: center">
@@ -15,13 +19,19 @@
           <div id="white-timer" class="timer"></div>
         </div>
         <div class="menu">
-          <div id="game-status" style="display: flex; gap: 0.5rem; font-weight: 900;">
+          <div
+            id="game-status"
+            style="display: flex; gap: 0.5rem; font-weight: 900"
+          >
             <p id="turn">White</p>
             <p>to move</p>
           </div>
           <div id="move-history"></div>
-          <div id ="btn-container"style="display: flex; gap: 0.5rem; width: 100%">
-            <button id="surrender-btn"class="menu-button">
+          <div
+            id="btn-container"
+            style="display: flex; gap: 0.5rem; width: 100%"
+          >
+            <button id="surrender-btn" class="menu-button">
               <i class="fa fa-flag"></i>
             </button>
             <button id="pause-btn" class="menu-button">
@@ -36,14 +46,14 @@
     </div>
   </body>
 </html>
-<div id="promotionPopup" class="popup" style="place-items: center;">
+<div id="promotionPopup" class="popup" style="place-items: center">
   <div class="promotion-popup-content">
     <div id="piece-options"></div>
   </div>
 </div>
-<div id="gameoverPopup" class="popup" style="place-items: center;">
+<div id="gameoverPopup" class="popup" style="place-items: center">
   <div id="gameoverPopupContent" class="gameover-popup-content">
-    <p id="gameState" style="font-weight: 900; font-size: x-large;"></p>
+    <p id="gameState" style="font-weight: 900; font-size: x-large"></p>
     <p id="gameStateSubtitle"></p>
 
     <div style="display: flex; gap: 0.5rem; width: 100%">
@@ -51,7 +61,7 @@
         New game
         <i class="fa fa-refresh"></i>
       </button>
-      <button id="close-btn" class="gameover-popup-button" >
+      <button id="close-btn" class="gameover-popup-button">
         Close
         <i class="fa fa-times"></i>
       </button>
