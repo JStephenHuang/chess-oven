@@ -14,7 +14,7 @@ export function displayTurn(moveHistory) {
 export function displayMoveHistory(moveHistory) {
   console.log(moveHistory.length - 1);
 
-  const { initial, start, end, type } = moveHistory[moveHistory.length - 1];
+  const { initial, end, type } = moveHistory[moveHistory.length - 1];
 
   const moveHistoryContainer = document.getElementById("move-history");
 
@@ -25,17 +25,15 @@ export function displayMoveHistory(moveHistory) {
   const rowNumber = Math.ceil(moveHistory.length / 2);
   const moveId = `row${rowNumber}`;
 
-  const startSquare = convertToChessNotation(start);
   const endSquare = convertToChessNotation(end);
 
   let moveString = `${getPieceSymbol(initial)}*${endSquare}`;
 
-  console.log(type)
-  
-  if (type === "castle") {
-    moveString = end[0] === '2' ? "O-O-O" : "O-O";
-  }
+  console.log(type);
 
+  if (type === "castle") {
+    moveString = end[0] === "2" ? "O-O-O" : "O-O";
+  }
 
   if (type === "check") {
     moveString += "+";
@@ -60,7 +58,7 @@ export function displayMoveHistory(moveHistory) {
     moveRow.id = moveId;
 
     rowNumberParagraphElement.innerHTML = rowNumber;
-    rowNumberParagraphElement.style = "margin-right: 0.25rem"
+    rowNumberParagraphElement.style = "margin-right: 0.25rem";
     moveRow.appendChild(rowNumberParagraphElement);
     moveRow.appendChild(moveParagraphElement);
     moveHistoryContainer.appendChild(moveRow);

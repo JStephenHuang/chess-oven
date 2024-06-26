@@ -6,41 +6,39 @@ Number.prototype.pad = function (size) {
   return s;
 };
 
-import { isPaused, gameState } from "../board.js";
+import { isPaused } from "../board.js";
+import { onGameOver } from "./onGameOver.js";
 
-export function countdown() {
-  let whiteTime = 10;
-  let blackTime = 10;
+export function countdown(time, whiteTimerElement, blackTimerElement) {
+  let whiteTime = time;
+  let blackTime = time;
   const timeElpased = setInterval(function () {
     const turn = document.getElementById("turn").innerHTML; // White | Black
+
     if (isPaused) return;
 
     if (turn === "White") {
-      const whiteTimerElement = document.getElementById("white-timer");
-
       whiteTime--;
 
-      if (whiteTime === 0) {
-        gameState = "black won";
+      if (whiteTime < 0) {
+        onGameOver("Flag", `Black won. White ran out of time.`);
         clearInterval(timeElpased);
+        return;
       } // declare black as the winner
       const minutes = Math.floor(whiteTime / 60);
       const seconds = whiteTime - minutes * 60;
 
-      console.log(whiteTime);
-
       whiteTimerElement.innerHTML = `${minutes}:${seconds.pad()}`;
     } else {
-      const blackTimerElement = document.getElementById("black-timer");
-
       blackTime--;
 
-      if (blackTime === 0) {
-        gameState = "white won";
+      if (blackTime < 0) {
+        onGameOver("Flag", `White won. Black ran out of time.`);
         clearInterval(timeElpased);
+        return;
       }
 
-      const minutes = Math.floor(whiteTime / 60);
+      const minutes = Math.floor(blackTime / 60);
       const seconds = blackTime - minutes * 60;
 
       blackTimerElement.innerHTML = `${minutes}:${seconds.pad()}`;
@@ -48,12 +46,10 @@ export function countdown() {
   }, 1000);
 }
 
-// function decrementTimer(color, time, idElement) {
+// function decrementTimer(color, time, timerElement) {
 //   if (isPaused) return;
 
-//   const timerElement = document.getElementById(idElement);
-
-//   if (time === 0) return;
+//   if (time < 0) return;
 
 //   time--;
 
