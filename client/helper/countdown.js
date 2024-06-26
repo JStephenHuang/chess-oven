@@ -21,6 +21,8 @@ export function countdown(time, whiteTimerElement, blackTimerElement) {
       whiteTime--;
 
       if (whiteTime < 0) {
+        playAudio("checkmate");
+
         onGameOver("Flag", `Black won. White ran out of time.`);
         clearInterval(timeElpased);
         return;
@@ -33,6 +35,8 @@ export function countdown(time, whiteTimerElement, blackTimerElement) {
       blackTime--;
 
       if (blackTime < 0) {
+        playAudio("checkmate");
+
         onGameOver("Flag", `White won. Black ran out of time.`);
         clearInterval(timeElpased);
         return;
