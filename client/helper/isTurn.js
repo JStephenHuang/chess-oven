@@ -8,3 +8,4 @@ export function isTurn(moveHistory, focusedSquare) {
   // movehistory -> 1, color -> white, FALSE
   // movehistory => 2, color => black, FALSE
 }
+
