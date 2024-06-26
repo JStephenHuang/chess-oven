@@ -86,9 +86,54 @@ function setMenuFeatures() {
   restartButton.addEventListener("click", restartPopup);
 }
 
-function surrenderPopup() {}
+function createPopup(message, confirmAction) {
+  const popup = document.createElement('div');
+  popup.className = 'menu-popup';
+  popup.innerHTML = `
+    <div class="popup-content">
+      <p>${message}</p>
+      <button class="confirm-btn">Confirm</button>
+      <button class="cancel-btn">Cancel</button>
+    </div>
+  `;
 
-function restartPopup() {}
+  document.getElementById("btn-container").appendChild(popup);
+
+  const confirmBtn = popup.querySelector('.confirm-btn');
+  const cancelBtn = popup.querySelector('.cancel-btn');
+
+  confirmBtn.addEventListener('click', () => {
+    confirmAction();
+    closePopup(popup);
+  });
+
+  cancelBtn.addEventListener('click', () => closePopup(popup));
+
+  // Close popup when clicking outside
+  popup.addEventListener('click', (e) => {
+    if (e.target === popup) {
+      closePopup(popup);
+    }
+  });
+}
+
+function closePopup(popup) {
+  document.getElementById("btn-container").removeChild(popup);
+}
+
+function surrenderPopup() {
+  createPopup('Are you sure you want to surrender?', () => {
+    // Add your surrender logic here
+    console.log('Player surrendered');
+  });
+}
+
+function restartPopup() {
+  createPopup('Are you sure you want to restart the game?', () => {
+    location.reload()
+    console.log('Game restarted');
+  });
+}
 
 setMenuFeatures();
 setBoard();
