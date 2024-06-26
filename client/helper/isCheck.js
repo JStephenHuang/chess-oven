@@ -9,7 +9,7 @@ export function isCheck(board, color) {  // if color -> white, sees is white is 
 
     for (const threatenedPiece of allThreatenedPieces) { // [p,r,r,k,q] -> True (in check)  
         if (threatenedPiece.piece === "k" || threatenedPiece.piece === "K") {
-
+            
             return true
 
         } 

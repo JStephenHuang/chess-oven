@@ -16,7 +16,8 @@ export function isCastling(initial, focusedSquare, targetSquare) {
   addMove(
     `${focusedSquare.childNodes[0].id}`,
     `${focusedSquare.id}`,
-    `${targetSquare.id}`
+    `${targetSquare.id}`,
+    "castle"
   );
 
   targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square

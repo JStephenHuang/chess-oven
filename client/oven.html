@@ -1,0 +1,43 @@
+<html lang="en">
+  <script type="module" src="board.js" defer></script>
+  <link href="global.css" rel="stylesheet" />
+  <link href="oven.css" rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
+  <body>
+    <div id="root">
+      <div style="display: flex; gap: 1rem; align-items: center">
+        <div class="board-container">
+          <div id="black-timer" class="timer">10:00</div>
+          <div id="board"></div>
+          <div id="white-timer" class="timer">10:00</div>
+        </div>
+        <div class="menu">
+          <div id="game-status" style="display: flex; gap: 0.5rem">
+            <p id="turn">White</p>
+            <p>to move</p>
+          </div>
+          <div id="move-history"></div>
+          <div style="display: flex; gap: 0.5rem; width: 100%">
+            <button id="surrender-btn"class="menu-button">
+              <i class="fa fa-flag"></i>
+            </button>
+            <button id="pause-btn" class="menu-button">
+              <i class="fa fa-pause"></i>
+            </button>
+            <button id="restart-btn" class="menu-button" onclick="">
+              <i class="fa fa-refresh"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<div id="promotionPopup" class="popup">
+  <div class="popup-content">
+    <div id="piece-options"></div>
+  </div>
+</div>

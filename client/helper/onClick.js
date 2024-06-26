@@ -11,15 +11,19 @@ import { onEnPassant } from "./onEnPassant.js";
 import { checkPromotion } from "./checkPromotion.js";
 
 import { previewBoard } from "./previewBoard.js";
+import { playAudio } from "./playAudio.js";
+import { displayTurn, displayMoveHistory } from "./display.js";
+import { isPaused, gameState } from "../board.js";
 
 export const focused = []; // contains selected square element, or empty if nothing selected
 export const moveHistory = [];
 
-export function addMove(pieceInitial, startPosition, endPosition) {
+export function addMove(pieceInitial, startPosition, endPosition, moveType) {
   moveHistory.push({
     initial: pieceInitial,
     start: startPosition,
     end: endPosition,
+    type: moveType,
   });
 }
 
@@ -42,11 +46,15 @@ async function movePiece(focusedSquare, targetSquare) {
     focusedSquare.classList.remove("selected");
     focused.pop();
   } else {
+    if (isPaused) return unselectSquare(focusedSquare);
+
     // if user valid target square
 
     // check if the move is legal
 
     // if not legal move or not your turn
+
+    let move = "move";
 
     const pieceInitial = focusedSquare.childNodes[0].id;
     const color =
@@ -60,12 +68,19 @@ async function movePiece(focusedSquare, targetSquare) {
     ); // make preview of the board after move
 
     if (isCastling(pieceInitial, focusedSquare, targetSquare)) {
+      playAudio("castle");
+      displayMoveHistory(moveHistory);
+
       return;
     }
 
     const legalMoves = getLegalMoves(focusedSquare, currentBoard);
 
-    if (!legalMoves.includes(targetSquare.id) || !isTurn(moveHistory, focusedSquare) || isCheck(previewedBoard, color)) {   
+    if (
+      !legalMoves.includes(targetSquare.id) ||
+      !isTurn(moveHistory, focusedSquare) ||
+      isCheck(previewedBoard, color)
+    ) {
       // if not legal move or not your turn or it would result in check
 
       // if not a legal move
@@ -85,12 +100,17 @@ async function movePiece(focusedSquare, targetSquare) {
         `${targetSquare.id}`
       );
 
-      onEnPassant(moveHistory)
+      onEnPassant(moveHistory);
 
       // check for promotion
-      const pieceInitial = focusedSquare.childNodes[0].id
-   
-      await checkPromotion(pieceInitial, focusedSquare, targetSquare)
+      const pieceInitial = focusedSquare.childNodes[0].id;
+
+      await checkPromotion(pieceInitial, focusedSquare, targetSquare);
+
+      // sound effect
+      if (targetSquare.innerHTML !== "") {
+        move = `x${move}`;
+      }
 
       // Move completed
       targetSquare.innerHTML = focusedSquare.innerHTML; // piece moves to target square
@@ -98,28 +118,34 @@ async function movePiece(focusedSquare, targetSquare) {
       focused.push(targetSquare);
       targetSquare.classList.add("selected");
 
-      setTimeout(() => {
-        if (isCheck(currentBoard, opponentColor)) {
-          if (isCheckMate(currentBoard, opponentColor)) {
-            
-            alert("CHECKMATE")
-  
-          }
-        }
-  
-        if (isStalemate(currentBoard, opponentColor)) {
-          alert("STALEMATE")
-        }
-      }, 1);
+      const currentBoard = getPiecesPosition().reverse();
+      const opponentColor = color === "white" ? "black" : "white";
 
-      const currentBoard = getPiecesPosition().reverse()
-      const opponentColor = color === "white" ? "black" : "white"
+      if (isCheck(currentBoard, opponentColor)) {
+        if (isCheckMate(currentBoard, opponentColor)) {
+          move = "checkmate";
+          gameState = `${color} won`;
+        } else {
+          move = "check";
+        }
+      }
 
+      if (isStalemate(currentBoard, opponentColor)) {
+        move = "stalemate";
+        gameState = "statemate";
+      }
       // rotate()
+      playAudio(move);
+
+      moveHistory[moveHistory.length - 1].type = move;
+
+      console.log(moveHistory);
+
+      displayMoveHistory(moveHistory);
+      displayTurn(moveHistory);
     }
   }
 }
-
 
 export function onClick(event) {
   const targetSquare = event.target; // new selected square
@@ -130,13 +156,11 @@ export function onClick(event) {
 
     // display legal squares
   }
-
   // if there is already a selected square
   else if (focused.length === 1) {
     const focusedSquare = focused[0]; // our old square
 
     movePiece(focusedSquare, targetSquare);
-    
   }
 
   // if there are two squares selected:
