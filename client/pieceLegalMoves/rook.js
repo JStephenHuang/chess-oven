@@ -1,5 +1,5 @@
 import { isLegalMove } from "../helper/isLegalMove.js";
-import { moveHistory } from "../helper/onClick.js";
+
 export function getRookLegalMoves(initial, position, board) {
   const { row, col } = position;
   const legalMoves = [];
@@ -38,6 +38,6 @@ export function getRookLegalMoves(initial, position, board) {
   for (const move of rookMoves) {
     isLegalMove(initial, board, move.targetRow, move.targetCol, legalMoves);
   }
- 
+
   return legalMoves;
 }

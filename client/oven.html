@@ -10,12 +10,12 @@
     <div id="root">
       <div style="display: flex; gap: 1rem; align-items: center">
         <div class="board-container">
-          <div id="black-timer" class="timer">10:00</div>
+          <div id="black-timer" class="timer"></div>
           <div id="board"></div>
-          <div id="white-timer" class="timer">10:00</div>
+          <div id="white-timer" class="timer"></div>
         </div>
         <div class="menu">
-          <div id="game-status" style="display: flex; gap: 0.5rem">
+          <div id="game-status" style="display: flex; gap: 0.5rem; font-weight: 900;">
             <p id="turn">White</p>
             <p>to move</p>
           </div>
@@ -36,8 +36,25 @@
     </div>
   </body>
 </html>
-<div id="promotionPopup" class="popup">
-  <div class="popup-content">
+<div id="promotionPopup" class="popup" style="place-items: center;">
+  <div class="promotion-popup-content">
     <div id="piece-options"></div>
+  </div>
+</div>
+<div id="gameoverPopup" class="popup" style="place-items: center;">
+  <div id="gameoverPopupContent" class="gameover-popup-content">
+    <p id="gameState" style="font-weight: 900; font-size: x-large;"></p>
+    <p id="gameStateSubtitle"></p>
+
+    <div style="display: flex; gap: 0.5rem; width: 100%">
+      <button id="gameover-restart-btn" class="gameover-popup-button">
+        New game
+        <i class="fa fa-refresh"></i>
+      </button>
+      <button id="close-btn" class="gameover-popup-button" >
+        Close
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
   </div>
 </div>

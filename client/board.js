@@ -71,8 +71,26 @@ function setBoard() {
   }
 }
 
+function setTimer(time) {
+  const whiteTimerElement = document.getElementById("white-timer");
+  const blackTimerElement = document.getElementById("black-timer");
+
+  const minutes = Math.floor(time / 60);
+  const seconds = time - minutes * 60;
+  const formattedTime = `${minutes}:${seconds.pad()}`;
+
+  whiteTimerElement.innerHTML = formattedTime;
+  blackTimerElement.innerHTML = formattedTime;
+
+  countdown(time, whiteTimerElement, blackTimerElement);
+}
+
 export function togglePause() {
   isPaused = !isPaused;
+}
+
+export function pause() {
+  isPaused = true;
 }
 
 function setMenuFeatures() {
@@ -137,4 +155,4 @@ function restartPopup() {
 
 setMenuFeatures();
 setBoard();
-countdown();
+setTimer(62);

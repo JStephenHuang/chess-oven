@@ -13,7 +13,8 @@ import { checkPromotion } from "./checkPromotion.js";
 import { previewBoard } from "./previewBoard.js";
 import { playAudio } from "./playAudio.js";
 import { displayTurn, displayMoveHistory } from "./display.js";
-import { isPaused, gameState } from "../board.js";
+import { isPaused } from "../board.js";
+import { onGameOver } from "./onGameOver.js";
 
 export const focused = []; // contains selected square element, or empty if nothing selected
 export const moveHistory = [];
@@ -124,7 +125,12 @@ async function movePiece(focusedSquare, targetSquare) {
       if (isCheck(currentBoard, opponentColor)) {
         if (isCheckMate(currentBoard, opponentColor)) {
           move = "checkmate";
-          gameState = `${color} won`;
+          onGameOver(
+            "Checkmate",
+            `${
+              color.charAt(0).toUpperCase() + color.slice(1)
+            } won by checkmate.`
+          );
         } else {
           move = "check";
         }
@@ -132,9 +138,14 @@ async function movePiece(focusedSquare, targetSquare) {
 
       if (isStalemate(currentBoard, opponentColor)) {
         move = "stalemate";
-        gameState = "statemate";
+        onGameOver(
+          `Stalemate`,
+          `${
+            opponentColor.charAt(0).toUpperCase() + opponentColor.slice(1)
+          } has no legal moves.`
+        );
       }
-      // rotate()
+
       playAudio(move);
 
       moveHistory[moveHistory.length - 1].type = move;
