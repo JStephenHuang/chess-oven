@@ -142,7 +142,7 @@ function closePopup(popup) {
 
 function surrenderPopup() {
   createPopup("Are you sure you want to surrender?", () => {
-    onGameOver("Surrender", "Fuck you");
+    onGameOver("Surrender", "Game over");
     // Add your surrender logic here
   });
 }
